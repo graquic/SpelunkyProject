@@ -21,9 +21,9 @@ public class Player : MonoBehaviour
     Animator animator;
     [HideInInspector] public Rigidbody2D rb;
     [SerializeField] TextMeshProUGUI text;
-    public BoxCollider2D boxcol;
+    public GameObject checkGrabEdge;
 
-    // public UnityEvent On
+    [Header("bool º¯¼öµé")]
     public bool isGrounded;
     public bool isOnTheEdge;
     public bool isGrabEdge;
@@ -72,6 +72,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        checkGrabEdge.transform.position = new Vector2(0.5f, 0.17f);
+
         CheckDirection();
 
         states[(int)curState].Update();
@@ -147,12 +149,11 @@ public class IdleState : StateBase<Player>
 
     public override void Enter()
     {
-        owner.isGrounded = true;
+        
     }
 
     public override void Exit()
     {
-        owner.isOnTheEdge = false;
         currentWaitTime = 0;
     }
 
@@ -538,7 +539,7 @@ public class GrapEdgeState : StateBase<Player>
 
         if (Input.GetAxisRaw("Vertical") < 0 && Input.GetButtonDown("Jump"))
         {
-            owner.boxcol.isTrigger = true;
+            owner.checkGrabEdge.GetComponent<BoxCollider2D>().isTrigger = true; // TODO
             owner.ChangeState(PlayerState.Fall);
         }
     }
