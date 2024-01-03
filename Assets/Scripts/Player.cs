@@ -1,13 +1,16 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public enum PlayerState
 {
-    Idle, Move, Jump, Sit, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, Dead
+    Idle, Move, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, Dead, 
 }
 
 public class Player : MonoBehaviour
@@ -15,14 +18,31 @@ public class Player : MonoBehaviour
     PlayerState curState;
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
-    SpriteRenderer sprite;
     Animator animator;
-    [SerializeField] TextMeshProUGUI text;
-
-
     [HideInInspector] public Rigidbody2D rb;
-    public bool isGrounded;
+    [SerializeField] TextMeshProUGUI text;
+    public BoxCollider2D boxcol;
 
+    // public UnityEvent On
+    public bool isGrounded;
+    public bool isOnTheEdge;
+    public bool isGrabEdge;
+    public bool isFlipped;
+
+
+    [Header("이동(Move)")]
+    [SerializeField] float moveSpeed;
+    float inputX;
+
+    public float MoveSpeed { get { return moveSpeed; } }
+    
+    [Header("점프(Jump)")]
+    [SerializeField] float jumpPowerX;
+    public float JumpPowerX { get { return jumpPowerX; } }
+
+    [SerializeField] float jumpPowerY;
+    public float JumpPowerY { get { return jumpPowerY; } }
+    
 
 
     private void Awake()
@@ -34,7 +54,8 @@ public class Player : MonoBehaviour
         states[(int)PlayerState.Idle] = new IdleState(this);
         states[(int)PlayerState.Move] = new MoveState(this);
         states[(int)PlayerState.Jump] = new JumpState(this);
-        states[(int)PlayerState.Sit] = new SitState(this);
+        states[(int)PlayerState.SitDown] = new SitDownState(this);
+        states[(int)PlayerState.SitUp] = new SitUpState(this);
         states[(int)PlayerState.Attack] = new AttackState(this);
         states[(int)PlayerState.Hit] = new HitState(this);
         states[(int)PlayerState.Stunned] = new StunnedState(this);
@@ -51,8 +72,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        CheckDirection();
+
         states[(int)curState].Update();
         text.text = curState.ToString();
+        
     }
 
     public void ChangeState(PlayerState state)
@@ -63,17 +87,48 @@ public class Player : MonoBehaviour
         states[(int)curState].Enter();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public bool CheckCurrentAnimationEnd()
     {
-        if(collision.collider.tag == "Ground")
+        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
+            //animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+    }
+
+    void CheckDirection()
+    {
+        if(inputX < 0 && isFlipped == false)
+        {
+            isFlipped = true;
+            float scaleX = -Mathf.Abs(transform.localScale.x);
+            transform.localScale = new Vector2(scaleX, transform.localScale.y);
+        }
+
+        else if(inputX > 0 && isFlipped == true)
+        {
+            isFlipped = false;
+            float scaleX = Mathf.Abs(transform.localScale.x);
+            transform.localScale = new Vector2(scaleX, transform.localScale.y);
+        }
+    }
+
+    public void InputMove()
+    {
+        inputX = Input.GetAxis("Horizontal");
+
+        rb.velocity = new Vector2(inputX * MoveSpeed, rb.velocity.y);
+    }
+
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Ground")
         {
             isGrounded = true;
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.collider.tag == "Ground")
+        if (collision.tag == "Ground")
         {
             isGrounded = false;
         }
@@ -87,6 +142,9 @@ public class IdleState : StateBase<Player>
     {
     }
 
+    float currentWaitTime;
+    float maxWaitTime = 0.5f;
+
     public override void Enter()
     {
         owner.isGrounded = true;
@@ -94,20 +152,23 @@ public class IdleState : StateBase<Player>
 
     public override void Exit()
     {
-
+        owner.isOnTheEdge = false;
+        currentWaitTime = 0;
     }
 
     public override void Update()
     {
         CheckMove();
         CheckJump();
-
+        CheckSit();
+        CheckFall();
+        CheckOnTheEdge();
         
     }
 
     void CheckMove()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0)
+        if (Input.GetAxisRaw("Horizontal") != 0 )
         {
             owner.ChangeState(PlayerState.Move);
         }
@@ -121,24 +182,48 @@ public class IdleState : StateBase<Player>
         }
     }
 
+    void CheckSit()
+    {
+        if(Input.GetAxisRaw("Vertical") < 0)
+        {
+            owner.ChangeState(PlayerState.SitDown);
+        }
+    }
+
+    void CheckFall()
+    {
+        if(owner.rb.velocity.y < -0.1f)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
+    }
+
+    void CheckOnTheEdge()
+    {
+        currentWaitTime += Time.deltaTime;
+
+        if(owner.isGrounded == true && owner.isOnTheEdge ==  true && currentWaitTime >= maxWaitTime)
+        {
+            owner.ChangeState(PlayerState.OnTheEdge);
+        }
+    }
     
 }
 
 
-public class MoveState : StateBase<Player>, IMoveable
+public class MoveState : StateBase<Player>
 {
     public MoveState(Player player) : base(player)
     {
     }
 
-    /*
-    float moveSpeed;
-    public float MoveSpeed { get { return moveSpeed; } }
+    
+    
 
-    */
+    
     public override void Enter()
     {
-        // moveSpeed = 3f;
+        
     }
 
     public override void Exit()
@@ -148,25 +233,29 @@ public class MoveState : StateBase<Player>, IMoveable
 
     public override void Update()
     {
-        InputMove();
+        owner.InputMove();
 
         CheckIdle();
+        CheckSit();
         CheckJump();
+        CheckFall();
         
     }
 
-    public void InputMove()
-    {
-        float inputX = Input.GetAxis("Horizontal");
-
-        owner.rb.velocity = new Vector2(inputX * IMoveable.MOVESPEED, owner.rb.velocity.y);
-    }
+    
 
     void CheckIdle()
     {
         if (Mathf.Abs(owner.rb.velocity.x) < 0.05f)
         {
             owner.ChangeState(PlayerState.Idle);
+        }
+    }
+    void CheckSit()
+    {
+        if (Input.GetAxisRaw("Vertical") < 0)
+        {
+            owner.ChangeState(PlayerState.SitDown);
         }
     }
 
@@ -177,21 +266,26 @@ public class MoveState : StateBase<Player>, IMoveable
             owner.ChangeState(PlayerState.Jump);
         }
     }
+
+    void CheckFall()
+    {
+        if (owner.rb.velocity.y < -0.1f)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
+    }
 }
 
-public class JumpState : StateBase<Player>, IMoveable
+public class JumpState : StateBase<Player>
 {
     public JumpState(Player owner) : base(owner)
     {
     }
 
-    float jumpPower;
 
     public override void Enter()
     {
-        jumpPower = 5;
-
-        owner.rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
+        owner.rb.AddForce(new Vector2(0, owner.JumpPowerY), ForceMode2D.Impulse);
     }
 
     public override void Exit()
@@ -201,18 +295,14 @@ public class JumpState : StateBase<Player>, IMoveable
 
     public override void Update()
     {
-        InputMove();
+        owner.InputMove();
 
         CheckIdle();
-        // CheckMove();
+        CheckMove();
+        CheckFall();
+        CheckGrabEdge();
     }
 
-    public void InputMove()
-    {
-        float inputX = Input.GetAxis("Horizontal");
-        
-        owner.rb.velocity = new Vector2(inputX * IMoveable.MOVESPEED, owner.rb.velocity.y);
-    }
 
     void CheckIdle()
     {
@@ -224,32 +314,93 @@ public class JumpState : StateBase<Player>, IMoveable
 
     void CheckMove()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 && owner.isGrounded)
+        if (Input.GetAxisRaw("Horizontal") != 0 && owner.rb.velocity.y == 0 && owner.isGrounded)
         {
             owner.ChangeState(PlayerState.Move);
         }
     }
+    void CheckFall()
+    {
+        if (owner.rb.velocity.y < -0.1f)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
+    }
+
+    void CheckGrabEdge()
+    {
+        if(owner.isGrounded == false && owner.isGrabEdge == true)
+        {
+            owner.ChangeState(PlayerState.GrabEdge);
+        }
+    }
+
 }
 
-public class SitState : StateBase<Player>
+public class SitDownState : StateBase<Player>
 {
-    public SitState(Player owner) : base(owner)
+    public SitDownState(Player owner) : base(owner)
     {
     }
 
     public override void Enter()
     {
-
+        
     }
 
     public override void Exit()
     {
-
+        
     }
 
     public override void Update()
     {
+        CheckSitUp();
+        CheckFall();
+    }
 
+    void CheckSitUp()
+    {
+        if(Input.GetAxisRaw("Vertical") >= 0)
+        {
+            owner.ChangeState(PlayerState.SitUp);
+        }
+    }
+
+    void CheckFall()
+    {
+        if (owner.rb.velocity.y < -0.1f)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
+    }
+
+}
+
+public class SitUpState : StateBase<Player>
+{
+    public SitUpState(Player owner) : base(owner)
+    {
+    }
+
+    public override void Enter()
+    {
+        
+    }
+
+    public override void Exit()
+    {
+        
+    }
+
+    public override void Update()
+    {
+        
+        if (owner.CheckCurrentAnimationEnd())
+        {
+            owner.ChangeState(PlayerState.Idle);
+        }
+        
     }
 }
 
@@ -319,26 +470,13 @@ public class StunnedState : StateBase<Player>
     }
 }
 
-public class OnTheEdge : StateBase<Player>
+public class OnTheEdge : IdleState
 {
     public OnTheEdge(Player owner) : base(owner)
     {
     }
 
-    public override void Enter()
-    {
-        
-    }
-
-    public override void Exit()
-    {
-
-    }
-
-    public override void Update()
-    {
-
-    }
+    
 }
 
 public class GrapEdgeState : StateBase<Player>
@@ -347,6 +485,8 @@ public class GrapEdgeState : StateBase<Player>
     {
     }
 
+    float jumpYdist = 3f;
+
     public override void Enter()
     {
 
@@ -354,12 +494,53 @@ public class GrapEdgeState : StateBase<Player>
 
     public override void Exit()
     {
-
+        owner.isGrabEdge = false;
+        // owner.boxcol.isTrigger = false;
     }
 
     public override void Update()
     {
+        CheckFall();
+        CheckJump();
+    }
 
+    void CheckJump()
+    {
+        if(owner.isFlipped == true)
+        {
+            if(Input.GetAxis("Horizontal") > 0 && Input.GetButtonDown("Jump"))
+            {
+                Vector3 dir = new Vector3(owner.transform.position.x + owner.JumpPowerX, owner.transform.position.y + jumpYdist) - owner.transform.position;
+                dir = dir.normalized;
+                owner.rb.AddForce(dir * owner.JumpPowerX, ForceMode2D.Impulse);
+                owner.ChangeState(PlayerState.Jump);
+            }
+        }
+        
+        else
+        {
+            if (Input.GetAxis("Horizontal") < 0 && Input.GetButtonDown("Jump"))
+            {
+                Vector3 dir = new Vector3(owner.transform.position.x - owner.JumpPowerX, owner.transform.position.y + jumpYdist) - owner.transform.position;
+                dir = dir.normalized;
+                owner.rb.AddForce(dir * owner.JumpPowerX, ForceMode2D.Impulse);
+                owner.ChangeState(PlayerState.Jump);
+            }
+        }
+    }
+
+    void CheckFall()
+    {
+        if (owner.rb.velocity.y < 0)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
+
+        if (Input.GetAxisRaw("Vertical") < 0 && Input.GetButtonDown("Jump"))
+        {
+            owner.boxcol.isTrigger = true;
+            owner.ChangeState(PlayerState.Fall);
+        }
     }
 }
 
@@ -381,7 +562,26 @@ public class FallState : StateBase<Player>
 
     public override void Update()
     {
-        
+        owner.InputMove();
+
+        CheckIdle();
+        CheckGrabEdge();
+    }
+
+    void CheckIdle()
+    {
+        if(owner.rb.velocity.y == 0 && owner.isGrounded == true)
+        {
+            owner.ChangeState(PlayerState.Idle);
+        }
+    }
+
+    void CheckGrabEdge()
+    {
+        if (owner.isGrounded == false && owner.isGrabEdge == true)
+        {
+            owner.ChangeState(PlayerState.GrabEdge);
+        }
     }
 }
 

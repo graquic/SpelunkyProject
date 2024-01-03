@@ -5,6 +5,5 @@ using UnityEngine;
 
 interface IMoveable
 {
-    const int MOVESPEED = 3;
     public abstract void InputMove();
 }
