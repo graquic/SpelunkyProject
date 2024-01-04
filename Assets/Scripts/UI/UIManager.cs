@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    Animator animator;
+    
 
     private void Awake()
     {
@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        animator = GetComponent<Animator>();
+        
     }
 
     

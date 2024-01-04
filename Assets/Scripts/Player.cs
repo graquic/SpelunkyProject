@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 public enum PlayerState
 {
-    Idle, Move, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, Dead, 
+    Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, Dead, 
 }
 
 public class Player : MonoBehaviour
@@ -32,10 +32,16 @@ public class Player : MonoBehaviour
 
     [Header("이동(Move)")]
     [SerializeField] float moveSpeed;
+    public float MoveSpeed { get { return moveSpeed; } }
+
     float inputX;
 
-    public float MoveSpeed { get { return moveSpeed; } }
+    [Header("달리기(Sprint)")]
+    [SerializeField] float sprintSpeed;
+    public float SprintSpeed { get { return sprintSpeed; } }
+
     
+
     [Header("점프(Jump)")]
     [SerializeField] float jumpPowerX;
     public float JumpPowerX { get { return jumpPowerX; } }
@@ -53,6 +59,7 @@ public class Player : MonoBehaviour
 
         states[(int)PlayerState.Idle] = new IdleState(this);
         states[(int)PlayerState.Move] = new MoveState(this);
+        states[(int)PlayerState.Sprint] = new SprintState(this);
         states[(int)PlayerState.Jump] = new JumpState(this);
         states[(int)PlayerState.SitDown] = new SitDownState(this);
         states[(int)PlayerState.SitUp] = new SitUpState(this);
@@ -119,6 +126,13 @@ public class Player : MonoBehaviour
         rb.velocity = new Vector2(inputX * MoveSpeed, rb.velocity.y);
     }
 
+    public void InputSprint()
+    {
+        inputX = Input.GetAxis("Horizontal");
+
+        rb.velocity = new Vector2(inputX * SprintSpeed, rb.velocity.y);
+    }
+
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -159,11 +173,13 @@ public class IdleState : StateBase<Player>
 
     public override void Update()
     {
+        CheckSprint();
         CheckMove();
         CheckJump();
         CheckSit();
         CheckFall();
         CheckOnTheEdge();
+        
         
     }
 
@@ -172,6 +188,14 @@ public class IdleState : StateBase<Player>
         if (Input.GetAxisRaw("Horizontal") != 0 )
         {
             owner.ChangeState(PlayerState.Move);
+        }
+    }
+
+    void CheckSprint()
+    {
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetAxisRaw("Horizontal") != 0)
+        {
+            owner.ChangeState(PlayerState.Sprint);
         }
     }
 
@@ -237,6 +261,7 @@ public class MoveState : StateBase<Player>
         owner.InputMove();
 
         CheckIdle();
+        CheckSprint();
         CheckSit();
         CheckJump();
         CheckFall();
@@ -245,14 +270,21 @@ public class MoveState : StateBase<Player>
 
     
 
-    void CheckIdle()
+    protected void CheckIdle()
     {
         if (Mathf.Abs(owner.rb.velocity.x) < 0.05f)
         {
             owner.ChangeState(PlayerState.Idle);
         }
     }
-    void CheckSit()
+    protected void CheckSprint()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxisRaw("Horizontal") != 0)
+        {
+            owner.ChangeState(PlayerState.Sprint);
+        }
+    }
+    protected void CheckSit()
     {
         if (Input.GetAxisRaw("Vertical") < 0)
         {
@@ -260,7 +292,7 @@ public class MoveState : StateBase<Player>
         }
     }
 
-    void CheckJump()
+    protected void CheckJump()
     {
         if (owner.isGrounded && Input.GetButtonDown("Jump") )
         {
@@ -268,7 +300,7 @@ public class MoveState : StateBase<Player>
         }
     }
 
-    void CheckFall()
+    protected void CheckFall()
     {
         if (owner.rb.velocity.y < -0.1f)
         {
@@ -277,6 +309,31 @@ public class MoveState : StateBase<Player>
     }
 }
 
+public class SprintState : MoveState
+{
+    public SprintState(Player player) : base(player)
+    {
+    }
+
+    public override void Update()
+    {
+        owner.InputSprint();
+
+        CheckIdle();
+        CheckMove();
+        CheckSit();
+        CheckJump();
+        CheckFall();
+    }
+
+    void CheckMove()
+    {
+        if(Input.GetKey(KeyCode.LeftShift) == false && Input.GetAxisRaw("Horizontal") != 0)
+        {
+            owner.ChangeState(PlayerState.Move);
+        }
+    }
+}
 public class JumpState : StateBase<Player>
 {
     public JumpState(Player owner) : base(owner)
@@ -286,7 +343,7 @@ public class JumpState : StateBase<Player>
 
     public override void Enter()
     {
-        owner.rb.AddForce(new Vector2(0, owner.JumpPowerY), ForceMode2D.Impulse);
+        owner.rb.AddForce(new Vector2(owner.rb.velocity.x, owner.JumpPowerY), ForceMode2D.Impulse);
     }
 
     public override void Exit()
@@ -312,7 +369,7 @@ public class JumpState : StateBase<Player>
             owner.ChangeState(PlayerState.Idle);
         }
     }
-
+    
     void CheckMove()
     {
         if (Input.GetAxisRaw("Horizontal") != 0 && owner.rb.velocity.y == 0 && owner.isGrounded)
