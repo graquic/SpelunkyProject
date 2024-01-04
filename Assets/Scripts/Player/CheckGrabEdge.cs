@@ -6,9 +6,11 @@ public class CheckGrabEdge : MonoBehaviour
 {
     [SerializeField] Player player;
 
+    public Collider2D grapper;
+
     private void Update()
     {
-        transform.localPosition = Vector3.zero + new Vector3(0.5f, 0.17f, 0);
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -19,11 +21,23 @@ public class CheckGrabEdge : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        if(collision.tag == "Edge")
+        {
+            grapper.enabled = true;
+        }
+
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.tag == "Ground" || collision.tag == "Wall")
         {
             player.isGrabEdge = false;
+            grapper.enabled = false;
+
         }
     }
 }
