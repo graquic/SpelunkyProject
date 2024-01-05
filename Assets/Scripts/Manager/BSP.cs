@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor.Experimental.GraphView;
+using System.Runtime.InteropServices;
+using TreeEditor;
 
 public enum Direction
 {
@@ -18,11 +20,16 @@ public class BSPNode
     public Vector2Int bottomLeft;
     public Vector2Int topRight;
 
+    public Vector2Int roomBL;
+    public Vector2Int roomTR;
+
     private Direction direction;
+    private Direction prevDirection;
 
     public bool isDivided;
-    private int divideRatio;
-    
+
+    public int depth;
+
 
 
     public BSPNode() { }
@@ -30,12 +37,6 @@ public class BSPNode
     {
         this.bottomLeft = bottomLeft;
         this.topRight = topRight;
-    }
-    public BSPNode(Vector2Int bottomLeft, Vector2Int topRight, int ratio)
-    {
-        this.bottomLeft = bottomLeft;
-        this.topRight = topRight;
-        this.divideRatio = ratio;
     }
 
     public void SetDirection()
@@ -49,6 +50,67 @@ public class BSPNode
             int temp = Random.Range(0, 2);
             if (temp == 0) { direction = Direction.Vertical; }
             else { direction = Direction.Horizontal; } 
+        }
+    }
+
+    public bool GetDirection()
+    {
+        if (direction == Direction.Vertical)
+        { return true; }
+
+        else return false;
+    }
+
+    public bool DivideNode(int ratio, int minDividedXSize , int minDividedYSize)
+    {
+        float temp;
+        Vector2Int dividePoint1, dividePoint2;
+
+        if (direction == Direction.Vertical)
+        {
+            temp = (topRight.x - bottomLeft.x);
+            temp = temp * ratio / 100;
+            int width = Mathf.RoundToInt(temp);
+            if (width < minDividedXSize || topRight.x - bottomLeft.x - width < minDividedXSize)
+                return false;
+            dividePoint1 = new Vector2Int(bottomLeft.x + width, topRight.y);
+            dividePoint2 = new Vector2Int(bottomLeft.x + width, bottomLeft.y);
+            /*
+            leftNode = new BSPNode(bottomLeft, dividePoint1);
+            rightNode = new BSPNode(dividePoint2, topRight);
+            */
+        }
+        else
+        {
+            temp = (topRight.y - bottomLeft.y);
+            temp = temp * ratio / 100;
+            int height = Mathf.RoundToInt(temp);
+            if (height < minDividedYSize || topRight.y - bottomLeft.y - height < minDividedYSize)
+                return false;
+            dividePoint1 = new Vector2Int(bottomLeft.x, bottomLeft.y + height);
+            dividePoint2 = new Vector2Int(topRight.x, bottomLeft.y + height);
+            /*
+            leftNode = new BSPNode(bottomLeft, dividePoint2);
+            rightNode = new BSPNode(dividePoint1, topRight);
+            */
+        }
+        
+        leftNode = new BSPNode(bottomLeft, dividePoint1);
+        rightNode = new BSPNode(dividePoint2, topRight);
+        
+
+        leftNode.parentNode = rightNode.parentNode = this;
+        isDivided = true;
+        return true;
+    }
+
+    public void CreateRoom()
+    {
+        int distanceFrom = 2;
+        if (!isDivided)
+        {
+            roomBL = new Vector2Int(bottomLeft.x + distanceFrom, bottomLeft.y + distanceFrom);
+            roomTR = new Vector2Int(topRight.x - distanceFrom, topRight.y - distanceFrom);
         }
     }
 

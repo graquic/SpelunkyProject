@@ -24,7 +24,7 @@ public class MoveState : StateBase<Player>
 
     public override void Update()
     {
-        owner.InputMoveAddForce(Time.deltaTime);
+        owner.InputMoveAddForce();
 
         CheckIdle();
         CheckSprint();
@@ -38,7 +38,7 @@ public class MoveState : StateBase<Player>
 
     protected void CheckIdle()
     {
-        if (Mathf.Abs(owner.inputX) < 0.05f)
+        if (Mathf.Abs(Input.GetAxis("Horizontal")) < 0.05f)
         {
             owner.ChangeState(PlayerState.Idle);
         }

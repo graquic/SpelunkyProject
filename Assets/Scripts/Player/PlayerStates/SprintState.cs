@@ -10,7 +10,7 @@ public class SprintState : MoveState
 
     public override void Update()
     {
-        owner.InputSprintAddForce(Time.deltaTime);
+        owner.InputSprintAddForce();
 
         CheckIdle();
         CheckMove();

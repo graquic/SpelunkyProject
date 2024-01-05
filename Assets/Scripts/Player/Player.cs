@@ -47,8 +47,9 @@ public class Player : MonoBehaviour
     [SerializeField] float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
 
-    public float inputX;
     [SerializeField] float maxMoveSpeed;
+
+    float inputX;
 
     [Header("´Þ¸®±â(Sprint)")]
     [SerializeField] float sprintSpeed;
@@ -138,7 +139,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void InputMoveAddForce( float time)
+    public void InputMoveAddForce()
     {
         inputX = Input.GetAxis("Horizontal");
 
@@ -147,10 +148,10 @@ public class Player : MonoBehaviour
         if (rb.velocity.x < -maxMoveSpeed && inputX < 0) return;
 
 
-        rb.AddForce(new Vector2(inputX * MoveSpeed * time, 0), ForceMode2D.Force);
+        rb.AddForce(new Vector2(inputX * MoveSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
 
-    public void InputSprintAddForce(float time)
+    public void InputSprintAddForce()
     {
         inputX = Input.GetAxis("Horizontal");
 
@@ -158,7 +159,7 @@ public class Player : MonoBehaviour
 
         if (rb.velocity.x < -maxSprintSpeed && inputX < 0) return;
 
-        rb.AddForce(new Vector2(inputX * SprintSpeed * time, 0), ForceMode2D.Force);
+        rb.AddForce(new Vector2(inputX * SprintSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
 
     public void TakeDamage(int damage)

@@ -20,7 +20,7 @@ public class FallState : StateBase<Player>
 
     public override void Update()
     {
-        owner.InputMoveAddForce(Time.deltaTime);
+        owner.InputMoveAddForce();
 
         CheckIdle();
         CheckMove();
