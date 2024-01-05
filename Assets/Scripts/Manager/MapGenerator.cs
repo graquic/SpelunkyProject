@@ -6,9 +6,15 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-    Vector2Int bottomLeft;
-    Vector2Int topRight;
+    public BSPNode mainNode;
 
-    
+    [SerializeField] int divideRatio;
+
+    private void Awake()
+    {
+        mainNode = new BSPNode(new Vector2Int(0, 0), new Vector2Int(30, 30));
+    }
+
+
 
 }
