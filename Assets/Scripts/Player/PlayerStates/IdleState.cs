@@ -8,8 +8,8 @@ public class IdleState : StateBase<Player>
     {
     }
 
-    float currentWaitTime;
-    float maxWaitTime = 0.5f;
+    float currentEdgeWait;
+    float maxEdgeWait = 0.5f;
 
     public override void Enter()
     {
@@ -18,7 +18,7 @@ public class IdleState : StateBase<Player>
 
     public override void Exit()
     {
-        currentWaitTime = 0;
+        currentEdgeWait = 0;
     }
 
     public override void Update()
@@ -30,7 +30,6 @@ public class IdleState : StateBase<Player>
         CheckFall();
         CheckOnTheEdge();
         CheckAttack();
-
     }
 
     void CheckMove()
@@ -75,9 +74,9 @@ public class IdleState : StateBase<Player>
 
     void CheckOnTheEdge()
     {
-        currentWaitTime += Time.deltaTime;
+        currentEdgeWait += Time.deltaTime;
 
-        if (owner.isGrounded == true && owner.isOnTheEdge == true && currentWaitTime >= maxWaitTime)
+        if (owner.isGrounded == true && owner.isOnTheEdge == true && currentEdgeWait >= maxEdgeWait)
         {
             owner.ChangeState(PlayerState.OnTheEdge);
         }

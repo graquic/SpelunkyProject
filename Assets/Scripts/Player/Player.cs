@@ -11,7 +11,7 @@ using Cinemachine;
 
 public enum PlayerState
 {
-    Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, Dead
+    Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, OnRope, Dead
 }
 
 public class Player : MonoBehaviour
@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     [SerializeField] float maxMoveSpeed;
 
     float inputX;
+    [HideInInspector] public Vector2 moveDir;
 
     [Header("달리기(Sprint)")]
     [SerializeField] float sprintSpeed;
@@ -88,6 +89,7 @@ public class Player : MonoBehaviour
         states[(int)PlayerState.OnTheEdge] = new OnTheEdgeState(this);
         states[(int)PlayerState.GrabEdge] = new GrapEdgeState(this);
         states[(int)PlayerState.Fall] = new FallState(this);
+        states[(int)PlayerState.OnRope] = new OnRopeState(this);
         states[(int)PlayerState.Dead] = new DeadState(this);
 
         curState = PlayerState.Idle;
@@ -98,10 +100,24 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        Vector3 currentVelocity = rb.velocity;
+        moveDir = currentVelocity.normalized;
+
         CheckDirection();
 
         states[(int)curState].Update();
+        
+        //디버깅용 텍스트
         text.text = curState.ToString();
+        if(transform.localScale.x < 0f)
+        {
+            text.transform.localScale = new Vector3 (-Mathf.Abs(transform.localScale.x), text.transform.localScale.y, text.transform.localScale.z);
+        }
+
+        else if(transform.localScale.x > 0f)
+        {
+            text.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), text.transform.localScale.y, text.transform.localScale.z);
+        }
         
     }
 

@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Wall
   - Edge
+  - Background
+  - BackgroundArea
+  - Rope
   layers:
   - Default
   - TransparentFX
@@ -14,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Ground
+  - Rope
   - 
   - 
   - 
@@ -43,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 541453683
+    locked: 0
+  - name: Item
+    uniqueID: 2261931575
     locked: 0

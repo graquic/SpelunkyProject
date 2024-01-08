@@ -6,6 +6,7 @@ public enum ItemType
 {
     Gun,
     Bomb,
+    Rope,
     Fuel,
 }
 
