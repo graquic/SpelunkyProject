@@ -7,7 +7,8 @@ using UnityEngine;
 public enum PoolType
 {
     Bullet,
-    Enemy
+    Enemy,
+    Bomb
 
 }
 
@@ -21,6 +22,8 @@ public class ObjectPool
 
 public class ObjectPoolManager : MonoBehaviour
 {
+    public static ObjectPoolManager Instance { get; private set; }
+
     [SerializeField] ObjectPool[] objectPools;
 
     Dictionary<PoolType, List<GameObject>> poolDictionary;
@@ -29,6 +32,14 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         InitializePool();
     }
 
@@ -76,5 +87,6 @@ public class ObjectPoolManager : MonoBehaviour
         obj.SetActive(false);
         poolDictionary[type].Add(obj);
         obj.transform.parent = poolParentDictionary[type];
+        obj.transform.localPosition = Vector3.zero;
     }
 }

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -15,6 +16,8 @@ public class MapGenerator : MonoBehaviour
         Right,
         Down,
     }
+    public static MapGenerator Instance { get; private set; }
+    
     public static bool edgeVerticalConnect;
 
     public BSPNode rootNode;
@@ -31,8 +34,11 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Vector2Int topRight;
 
     [Header("맵의 바깥 벽 두께")]
-    [Range(2, 20)] [SerializeField] private int extendedWidth;
-    [Range(2, 20)] [SerializeField] private int extendedHeight;
+    [SerializeField] private int extendedWidth;
+    [SerializeField] private int extendedHeight;
+
+    public int ExtendedWidth { get { return extendedWidth; } }
+    public int ExtendedHeight { get {  return extendedHeight; } }
 
     [Header("노드 분할 기준 길이")]
     [SerializeField] private int roomMinXSize;
@@ -72,6 +78,13 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         map = new int[topRight.y - bottomLeft.y, topRight.x - bottomLeft.x];
 
         treeList = new List<BSPNode>();
@@ -119,7 +132,6 @@ public class MapGenerator : MonoBehaviour
 
         CreateTileMap();
 
-        
     }
 
     void MakeTreeNodes(ref BSPNode node, int depth)
@@ -440,27 +452,11 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-        
-
-        /*
-        for (int y = 0; y < map.GetLength(0); y++)
-        {
-            for(int x = 0; x < map.GetLength(1); x++)
-            {
-                if (map[y, x] == 1)
-                {
-                    wallTilemap.SetTile(new Vector3Int(x, y, 0), wall);
-                }
-
-                else
-                {
-                    // roadTilemap.SetTile(new Vector3Int(x, y, 0), road);
-                }
-            }
-        }
-        */
-
     }
-        
-    
+    /*
+    public int[,] WorldPositionToMap(Vector3Int pos)
+    {
+
+    }   
+    */
 }

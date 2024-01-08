@@ -15,7 +15,7 @@ public class Rope : MonoBehaviour
         animator = GetComponent<Animator>();
     }
     
-    private void OnEnable()
+    private void Start()
     {
         player = GameManager.Instance.player;
 
@@ -30,7 +30,7 @@ public class Rope : MonoBehaviour
 
         if(checkCols == null)
         {
-            createdHeight = checkHeight;
+            createdHeight = (int) transform.position.y + checkHeight;
         }
 
         else
@@ -44,7 +44,7 @@ public class Rope : MonoBehaviour
                     minHeight = (int) col.transform.position.y;
                 }
 
-                createdHeight = minHeight;
+                createdHeight = (int) transform.position.y + minHeight;
             }
         }
     }

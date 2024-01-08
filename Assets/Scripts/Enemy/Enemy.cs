@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     protected int hp;
-    protected int damage;
+    protected int attDamage;
     
     protected float detectRange;
 
@@ -13,9 +13,9 @@ public abstract class Enemy : MonoBehaviour
 
 
 
-    public abstract void TakeDamage();
+    public abstract void TakeDamage(int Dmg);
 
-    public abstract void Attack();
+    public abstract void Attack(Player player);
 
     
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SitDownState : StateBase<Player>
@@ -20,6 +21,14 @@ public class SitDownState : StateBase<Player>
     public override void Exit()
     {
         currentWaitTime = 0;
+
+
+
+
+
+
+
+
         
     }
 

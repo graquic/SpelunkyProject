@@ -17,10 +17,12 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        
 
         if(player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
+        
     }
 }

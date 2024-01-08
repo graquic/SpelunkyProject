@@ -21,9 +21,8 @@ public class BackgroundReposition : MonoBehaviour
         float diffX = Mathf.Abs(playerPos.x - thisPos.x);
         float diffY = Mathf.Abs(playerPos.y - thisPos.y);
 
-        Vector3 playerDir = player.moveDir;
-        float dirX = playerDir.x < 0 ? -1 : 1;
-        float dirY = playerDir.y < 0 ? -1 : 1;
+        float dirX = playerPos.x > thisPos.x ? 1 : -1;
+        float dirY = playerPos.y > thisPos.y ? 1 : -1;
 
         switch(transform.tag)
         {

@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
     Animator animator;
-    PlayerInventory inven;
+    public PlayerInventory inven;
+    public Transform hand;
 
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public PlayerCameraController camController;
@@ -50,7 +51,6 @@ public class Player : MonoBehaviour
     [SerializeField] float maxMoveSpeed;
 
     float inputX;
-    [HideInInspector] public Vector2 moveDir;
 
     [Header("´Þ¸®±â(Sprint)")]
     [SerializeField] float sprintSpeed;
@@ -100,9 +100,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Vector3 currentVelocity = rb.velocity;
-        moveDir = currentVelocity.normalized;
-
         CheckDirection();
 
         states[(int)curState].Update();
@@ -183,11 +180,13 @@ public class Player : MonoBehaviour
         hp -= damage;
         if(damage < 3)
         {
+            print(hp);
             ChangeState(PlayerState.Hit);
         }
 
         else
         {
+            print(hp);
             ChangeState(PlayerState.Stunned);
         }
         
