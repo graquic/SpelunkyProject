@@ -17,41 +17,57 @@ public class Bomb : Item
     bool isBoom;
 
     [SerializeField] SpriteRenderer sprite;
-    //[SerializeField] ParticleSystem boomParticle;
-    [SerializeField] Tilemap platformTileMap;
+    [SerializeField] ParticleSystem boomParticle;
+    [SerializeField] Animation boomAnimation;
+    Tilemap platformTileMap;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        platformTileMap = MapGenerator.Instance.PlatformTileMap;
+        StartCoroutine(CheckStateInStart());
+    }
+
     private void Update()
     {
-        CheckStateInStart();
-        // CheckBoomEnd();
+        
     }
 
     private void OnDisable()
     {
-        
+        ResetAnimation();
         ObjectPoolManager.Instance.ReturnObject(PoolType.Bomb, gameObject);
     }
 
-    void CheckStateInStart()
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-        {
-            sprite.enabled = false;
-            // boomParticle.gameObject.SetActive(true);
 
-            if(isBoom == false)
+    IEnumerator CheckStateInStart()
+    {
+        while(true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                isBoom = true;
+                sprite.enabled = false;
+                boomParticle.gameObject.SetActive(true);
+                boomParticle.Stop();
+                boomParticle.Play();
+
                 Boom();
+                break;
             }
-            
+
+            yield return null;
         }
+
+        yield return new WaitForSeconds(boomParticle.main.duration);
+
+        boomParticle.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
+
     void Boom()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, boomRange);
@@ -93,17 +109,13 @@ public class Bomb : Item
             }
         }
 
-        /*
-        void CheckBoomEnd()
-        {
-            if(boomParticle.isPlaying == false)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-        */
     }
 
-    
+    void ResetAnimation()
+    {
+        // animation["Start"].normalizedTime = 0f;
+    }
+
+
 
 }

@@ -90,4 +90,12 @@ public class IdleState : StateBase<Player>
         }
     }
 
+    void CheckThrowBomb()
+    {
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            owner.ChangeState(PlayerState.Throw);
+        }
+    }
+
 }

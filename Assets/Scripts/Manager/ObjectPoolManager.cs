@@ -26,9 +26,9 @@ public class ObjectPoolManager : MonoBehaviour
 
     [SerializeField] ObjectPool[] objectPools;
 
-    Dictionary<PoolType, List<GameObject>> poolDictionary;
-    Dictionary<PoolType, GameObject> prefabDictionary;
-    Dictionary<PoolType, Transform> poolParentDictionary;
+    Dictionary<PoolType, List<GameObject>> poolDictionary = new();
+    Dictionary<PoolType, GameObject> prefabDictionary = new();
+    Dictionary<PoolType, Transform> poolParentDictionary = new();
 
     private void Awake()
     {
@@ -61,8 +61,11 @@ public class ObjectPoolManager : MonoBehaviour
                 obj.SetActive(false);
 
                 poolDictionary[pool.poolType].Add(obj);
+                
             }
         }
+
+        
     }
 
     public GameObject GetObject(PoolType type)

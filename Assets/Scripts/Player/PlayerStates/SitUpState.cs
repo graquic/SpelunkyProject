@@ -16,6 +16,8 @@ public class SitUpState : StateBase<Player>
     public override void Exit()
     {
         owner.transform.Find("Sprite").transform.position += new Vector3(0, 0.3f, 0);
+
+        // SetBoxCol();
     }
 
     public override void Update()
@@ -27,4 +29,11 @@ public class SitUpState : StateBase<Player>
         }
 
     }
+    
+    void SetBoxCol()
+    {
+        owner.triggeredCol.offset = new Vector2(-0.04287338f, -0.3467688f);
+        owner.triggeredCol.size = new Vector2(0.7462112f, 0.1726592f);
+    }
+    
 }

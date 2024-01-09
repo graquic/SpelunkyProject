@@ -11,7 +11,7 @@ using Cinemachine;
 
 public enum PlayerState
 {
-    Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, OnRope, Dead
+    Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, OnRope, Throw, Dead
 }
 
 public class Player : MonoBehaviour
@@ -20,15 +20,17 @@ public class Player : MonoBehaviour
 
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
-    Animator animator;
-    public PlayerInventory inven;
+    Animator animator;    
     public Transform hand;
+    public BoxCollider2D triggeredCol;
 
+    [HideInInspector] public PlayerInventory inven;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public PlayerCameraController camController;
-    [SerializeField] TextMeshProUGUI text;
-    
-    
+    [SerializeField] TextMeshProUGUI text;  
+    [SerializeField] Interactor interactor;
+
+
     public GameObject checkGrabEdge;
 
     private int dir;
@@ -76,6 +78,7 @@ public class Player : MonoBehaviour
         camController = GetComponent<PlayerCameraController>();
         inven = GetComponent<PlayerInventory>();
         
+        
 
         states[(int)PlayerState.Idle] = new IdleState(this);
         states[(int)PlayerState.Move] = new MoveState(this);
@@ -90,6 +93,7 @@ public class Player : MonoBehaviour
         states[(int)PlayerState.GrabEdge] = new GrapEdgeState(this);
         states[(int)PlayerState.Fall] = new FallState(this);
         states[(int)PlayerState.OnRope] = new OnRopeState(this);
+        states[(int)PlayerState.Throw] = new ThrowState(this);
         states[(int)PlayerState.Dead] = new DeadState(this);
 
         curState = PlayerState.Idle;

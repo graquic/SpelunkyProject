@@ -10,6 +10,7 @@ TagManager:
   - Background
   - BackgroundArea
   - Rope
+  - Item
   layers:
   - Default
   - TransparentFX

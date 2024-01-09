@@ -67,8 +67,12 @@ public class MapGenerator : MonoBehaviour
     [Header("鸥老 格废")]
     [SerializeField] private RuleTile wall;
     [SerializeField] private RuleTile background;
-    [SerializeField] private Tilemap platformTileMap;
+
     [SerializeField] private Tilemap backgroundTileMap;
+    [SerializeField] private Tilemap platformTileMap;
+    public Tilemap PlatformTileMap { get { return platformTileMap; } }
+
+    
 
     [Header("涝备,免备")]
     public GameObject startPoint;

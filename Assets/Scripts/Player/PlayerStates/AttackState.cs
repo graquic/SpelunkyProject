@@ -23,12 +23,17 @@ public class AttackState : StateBase<Player>
     {
         // switch문 대신 if문을 사용하여 구현하기
 
-        /*
+        
         if (owner.CheckCurrentAnimationEnd())
         {
             owner.ChangeState(PlayerState.Idle);
         }
-        */
+        
+    }
+
+    void CheckItemToAction()
+    {
+
     }
 
     void Throw()

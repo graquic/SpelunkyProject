@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class CheckOnTheEdge : MonoBehaviour
 {
-    [SerializeField] Player player;
+    Player player;
+
+    private void Start()
+    {
+        player = GameManager.Instance.player;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
