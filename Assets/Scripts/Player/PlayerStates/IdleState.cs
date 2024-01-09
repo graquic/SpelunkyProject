@@ -30,6 +30,7 @@ public class IdleState : StateBase<Player>
         CheckFall();
         CheckOnTheEdge();
         CheckAttack();
+        CheckThrowBomb();
     }
 
     void CheckMove()
@@ -92,8 +93,9 @@ public class IdleState : StateBase<Player>
 
     void CheckThrowBomb()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
+        if(owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
         {
+            owner.throwType = ThrowType.Bomb;
             owner.ChangeState(PlayerState.Throw);
         }
     }

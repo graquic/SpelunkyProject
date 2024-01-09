@@ -15,7 +15,7 @@ public class SitUpState : StateBase<Player>
 
     public override void Exit()
     {
-        owner.transform.Find("Sprite").transform.position += new Vector3(0, 0.3f, 0);
+        // owner.transform.Find("Sprite").transform.position += new Vector3(0, 0.3f, 0);
 
         // SetBoxCol();
     }

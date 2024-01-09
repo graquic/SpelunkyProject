@@ -13,7 +13,7 @@ public class CheckOnTheEdge : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Ground" && player.rb.velocity.y == 0)
+        if(collision.tag == "Ground")
         {
             player.isOnTheEdge = false;
         }
@@ -21,7 +21,7 @@ public class CheckOnTheEdge : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "Ground" && player.rb.velocity.y == 0)
+        if(collision.tag == "Ground")
         {
             player.isOnTheEdge = true;
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer.Internal;
 using UnityEngine;
 
 public class SitDownState : StateBase<Player>
@@ -8,7 +9,7 @@ public class SitDownState : StateBase<Player>
     public SitDownState(Player owner) : base(owner)
     {
     }
-    Item curHoldItem;
+    
 
     private float currentWaitTime;
     private float maxWaitTime = 1f;
@@ -18,7 +19,6 @@ public class SitDownState : StateBase<Player>
         currentWaitTime = 0;        
         owner.transform.Find("Sprite").transform.position -= new Vector3(0, 0.3f, 0);
 
-        curHoldItem = owner.inven.currentHoldItem;
         // SetBoxCol();
 
     }
@@ -26,7 +26,7 @@ public class SitDownState : StateBase<Player>
     public override void Exit()
     {
         currentWaitTime = 0;
-        owner.inven.currentHoldItem = curHoldItem;
+        owner.transform.Find("Sprite").transform.position += new Vector3(0, 0.3f, 0);
     }
 
     public override void Update()
@@ -39,20 +39,14 @@ public class SitDownState : StateBase<Player>
         DropBomb();
     }
 
-    void SetBoxCol()
-    {
-        owner.triggeredCol.offset = new Vector2(-0.04287338f, -0.3467688f);
-        owner.triggeredCol.size = new Vector2(1.088626f, 0.2080814f);
-    }
-
     void CheckHoldItem()
     {
-        if(curHoldItem == null && Input.GetButtonDown("Attack"))
+        if(owner.inven.currentHoldItem == null && Input.GetButtonDown("Attack"))
         {
             float minDist = 999;
 
-            Vector2 BL = new Vector2(owner.transform.position.x - 0.5f, owner.transform.position.y - 0.6f);
-            Vector2 TR = new Vector2(owner.transform.position.x + 0.6f, owner.transform.position.y - 0.25f);
+            Vector2 BL = new Vector2(owner.transform.position.x - 0.6f, owner.transform.position.y - 0.6f);
+            Vector2 TR = new Vector2(owner.transform.position.x + 0.7f, owner.transform.position.y - 0.2f);
 
 
             Collider2D[] cols = Physics2D.OverlapAreaAll(BL, TR);
@@ -68,27 +62,31 @@ public class SitDownState : StateBase<Player>
                     if (minDist > dist)
                     {
                         minDist = dist;
-                        curHoldItem = item;
+                        owner.inven.currentHoldItem = item;
                     }
                 }
             }
 
-            if (curHoldItem != null)
+            if (owner.inven.currentHoldItem != null)
             {
-                curHoldItem.transform.parent = owner.hand;
-                curHoldItem.transform.localPosition = new Vector2(0.3f, -0.3f);
-
-                Debug.Log(curHoldItem);
-                Debug.Log(owner.inven.currentHoldItem);
+                owner.inven.currentHoldItem.gameObject.layer = LayerMask.NameToLayer("Item");
+                owner.inven.currentHoldItem.transform.parent = owner.hand;
+                owner.inven.currentHoldItem.transform.localPosition = new Vector2(0.3f, -0.3f);
+                owner.inven.currentHoldItem.GetComponent<Collider2D>().isTrigger = true;
+                owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().gravityScale = 0;
             }
 
-            else { Debug.Log("아이템이 없음"); }            
         }
 
-        else if (curHoldItem != null && Input.GetButtonDown("Attack"))
+        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
         {
-            curHoldItem.transform.parent = null;
-            curHoldItem = null;
+            owner.inven.currentHoldItem.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+            owner.inven.currentHoldItem.transform.parent = null;
+            owner.inven.currentHoldItem.GetComponent<Collider2D>().isTrigger = false;
+            owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().gravityScale = 1;
+            owner.inven.currentHoldItem = null;
         }
     }
     

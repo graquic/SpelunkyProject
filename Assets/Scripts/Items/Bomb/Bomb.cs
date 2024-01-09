@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,44 +15,62 @@ public class Bomb : Item
     [SerializeField] int boomRange;
     [SerializeField] int boomDmg;
 
-    bool isBoom;
-
-    [SerializeField] SpriteRenderer sprite;
-    [SerializeField] ParticleSystem boomParticle;
-    [SerializeField] Animation boomAnimation;
+    SpriteRenderer sprite;
     Tilemap platformTileMap;
+    ParticleSystem boomParticle;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         animator = GetComponent<Animator>();
+        sprite = GetComponentInChildren<SpriteRenderer>();
+        boomParticle = GetComponentInChildren<ParticleSystem>();
+        
     }
 
     private void Start()
     {
         platformTileMap = MapGenerator.Instance.PlatformTileMap;
+        
+    }
+
+    private void OnEnable()
+    {
         StartCoroutine(CheckStateInStart());
     }
 
-    private void Update()
+    protected override void Update()
     {
-        
+        base.Update();
+        boomParticle.transform.rotation = Quaternion.identity;
     }
 
     private void OnDisable()
     {
-        ResetAnimation();
-        ObjectPoolManager.Instance.ReturnObject(PoolType.Bomb, gameObject);
+        sprite.enabled = true;
+        transform.rotation = Quaternion.identity;
+        GetComponent<Rigidbody2D>().gravityScale = 1;
+
+        if (GameManager.Instance.player.inven.currentHoldItem == this)
+        {
+            GameManager.Instance.player.inven.currentHoldItem = null;
+        }
+
     }
 
 
     IEnumerator CheckStateInStart()
     {
+        
         while(true)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 sprite.enabled = false;
-                boomParticle.gameObject.SetActive(true);
+
+                boomParticle.transform.transform.rotation = Quaternion.identity;
+
                 boomParticle.Stop();
                 boomParticle.Play();
 
@@ -64,8 +83,7 @@ public class Bomb : Item
 
         yield return new WaitForSeconds(boomParticle.main.duration);
 
-        boomParticle.gameObject.SetActive(false);
-        gameObject.SetActive(false);
+        ObjectPoolManager.Instance.ReturnObject(PoolType.Bomb, gameObject);
     }
 
     void Boom()
@@ -110,12 +128,5 @@ public class Bomb : Item
         }
 
     }
-
-    void ResetAnimation()
-    {
-        // animation["Start"].normalizedTime = 0f;
-    }
-
-
-
+   
 }

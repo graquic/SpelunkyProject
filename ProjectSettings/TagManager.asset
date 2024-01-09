@@ -20,9 +20,9 @@ TagManager:
   - UI
   - Ground
   - Rope
-  - 
-  - 
-  - 
+  - Player
+  - Item
+  - IgnorePlayer
   - 
   - 
   - 

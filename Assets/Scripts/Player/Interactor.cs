@@ -6,7 +6,14 @@ using UnityEngine.Events;
 public class Interactor : MonoBehaviour
 {
     public UnityEvent OnChange;
+    Player player;
 
+    private void Start()
+    {
+        player = GameManager.Instance.player;  
+    }
+
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.TryGetComponent<Bomb>(out Bomb bomb))
@@ -24,4 +31,5 @@ public class Interactor : MonoBehaviour
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
     }
+    */
 }

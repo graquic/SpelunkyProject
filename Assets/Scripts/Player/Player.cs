@@ -14,14 +14,24 @@ public enum PlayerState
     Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, OnRope, Throw, Dead
 }
 
+
+public enum ThrowType
+{
+    Bomb,
+    Item,
+}
+
 public class Player : MonoBehaviour
 {
     PlayerState curState;
+    public ThrowType throwType;
 
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
     Animator animator;    
     public Transform hand;
+    public Transform throwPoint;
+
     public BoxCollider2D triggeredCol;
 
     [HideInInspector] public PlayerInventory inven;
@@ -68,6 +78,11 @@ public class Player : MonoBehaviour
     [Header("점프(Jump)")]
     [SerializeField] float jumpPowerY;
     public float JumpPowerY { get { return jumpPowerY; } }
+
+    [Header("던지기(Throw)")]
+    [SerializeField] float throwPower;
+    public float ThrowPower { get { return throwPower; } }
+
     
 
 
@@ -110,15 +125,7 @@ public class Player : MonoBehaviour
         
         //디버깅용 텍스트
         text.text = curState.ToString();
-        if(transform.localScale.x < 0f)
-        {
-            text.transform.localScale = new Vector3 (-Mathf.Abs(transform.localScale.x), text.transform.localScale.y, text.transform.localScale.z);
-        }
-
-        else if(transform.localScale.x > 0f)
-        {
-            text.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), text.transform.localScale.y, text.transform.localScale.z);
-        }
+        
         
     }
 
@@ -141,7 +148,7 @@ public class Player : MonoBehaviour
         {
             isFlipped = true;
             float scaleX = -Mathf.Abs(transform.localScale.x);
-            transform.localScale = new Vector2(scaleX, transform.localScale.y);
+            transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
 
             dir = (int)transform.localScale.x;
         }
@@ -150,7 +157,7 @@ public class Player : MonoBehaviour
         {
             isFlipped = false;
             float scaleX = Mathf.Abs(transform.localScale.x);
-            transform.localScale = new Vector2(scaleX, transform.localScale.y);
+            transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
 
             dir = (int)transform.localScale.x;
         }
@@ -191,7 +198,7 @@ public class Player : MonoBehaviour
         else
         {
             print(hp);
-            ChangeState(PlayerState.Stunned);
+            ChangeState(PlayerState.Idle);
         }
         
     }

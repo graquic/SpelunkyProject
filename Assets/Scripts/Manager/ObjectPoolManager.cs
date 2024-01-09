@@ -8,7 +8,8 @@ public enum PoolType
 {
     Bullet,
     Enemy,
-    Bomb
+    Bomb,
+    BombParticle,
 
 }
 
@@ -73,6 +74,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (poolDictionary[type].Count <= 0)
         {
             GameObject obj = Instantiate(prefabDictionary[type]);
+            obj.SetActive(true);
 
             return obj;
         }
@@ -80,6 +82,7 @@ public class ObjectPoolManager : MonoBehaviour
         {
             GameObject obj = poolDictionary[type][0];
             poolDictionary[type].RemoveAt(0);
+            obj.SetActive(true);
 
             return obj;
         }
