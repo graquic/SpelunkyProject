@@ -9,7 +9,7 @@ public class SitDownState : StateBase<Player>
     public SitDownState(Player owner) : base(owner)
     {
     }
-    
+    Item curItem;
 
     private float currentWaitTime;
     private float maxWaitTime = 1f;
@@ -31,65 +31,15 @@ public class SitDownState : StateBase<Player>
 
     public override void Update()
     {
-        CheckHoldItem();
+        
         CheckSitUp();
         CheckFall();
 
         LookDown();
+
+        CheckDropItem();
         DropBomb();
     }
-
-    void CheckHoldItem()
-    {
-        if(owner.inven.currentHoldItem == null && Input.GetButtonDown("Attack"))
-        {
-            float minDist = 999;
-
-            Vector2 BL = new Vector2(owner.transform.position.x - 0.6f, owner.transform.position.y - 0.6f);
-            Vector2 TR = new Vector2(owner.transform.position.x + 0.7f, owner.transform.position.y - 0.2f);
-
-
-            Collider2D[] cols = Physics2D.OverlapAreaAll(BL, TR);
-
-            if (cols == null) { return; }
-
-            foreach(Collider2D col in cols)
-            {
-                if (col.gameObject.TryGetComponent<Item>(out Item item))
-                {
-                    float dist = Vector2.Distance(col.transform.position, owner.transform.position);
-
-                    if (minDist > dist)
-                    {
-                        minDist = dist;
-                        owner.inven.currentHoldItem = item;
-                    }
-                }
-            }
-
-            if (owner.inven.currentHoldItem != null)
-            {
-                owner.inven.currentHoldItem.gameObject.layer = LayerMask.NameToLayer("Item");
-                owner.inven.currentHoldItem.transform.parent = owner.hand;
-                owner.inven.currentHoldItem.transform.localPosition = new Vector2(0.3f, -0.3f);
-                owner.inven.currentHoldItem.GetComponent<Collider2D>().isTrigger = true;
-                owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-                owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().gravityScale = 0;
-            }
-
-        }
-
-        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
-        {
-            owner.inven.currentHoldItem.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
-            owner.inven.currentHoldItem.transform.parent = null;
-            owner.inven.currentHoldItem.GetComponent<Collider2D>().isTrigger = false;
-            owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            owner.inven.currentHoldItem.GetComponent<Rigidbody2D>().gravityScale = 1;
-            owner.inven.currentHoldItem = null;
-        }
-    }
-    
 
 
     void CheckSitUp()
@@ -115,6 +65,69 @@ public class SitDownState : StateBase<Player>
         if (currentWaitTime > maxWaitTime)
         {
             owner.camController.LookDown();
+        }
+    }
+
+    void CheckDropItem()
+    {
+        if (owner.inven.currentHoldItem == null && Input.GetButtonDown("Attack"))
+        {
+            Item closestItem = null;
+            float minDist = 999;
+
+            Vector2 BL = new Vector2(owner.transform.position.x - 0.6f, owner.transform.position.y - 0.6f);
+            Vector2 TR = new Vector2(owner.transform.position.x + 0.7f, owner.transform.position.y - 0.2f);
+
+            Collider2D[] cols = Physics2D.OverlapAreaAll(BL, TR);
+            if (cols == null) { return; }
+
+            foreach (Collider2D col in cols)
+            {
+                if (col.gameObject.TryGetComponent<Item>(out Item item))
+                {
+                    float dist = Vector2.Distance(col.transform.position, owner.transform.position);
+
+                    if (minDist > dist)
+                    {
+                        minDist = dist;
+                        closestItem = item;
+                    }
+                }
+            }
+
+            if(closestItem != null) // 아이템 돌려놓기
+            {
+                if(closestItem.transform.localScale != owner.transform.localScale)
+                {
+                    closestItem.transform.localScale = owner.transform.localScale;
+                }
+                
+                owner.inven.currentHoldItem = closestItem;
+            }
+
+            if (owner.inven.currentHoldItem != null)
+            {
+                curItem = owner.inven.currentHoldItem;
+
+                curItem.gameObject.layer = LayerMask.NameToLayer("Item");
+                curItem.transform.parent = owner.hand;
+                curItem.transform.localPosition = new Vector2(0.3f, -0.3f);
+                curItem.GetComponent<Collider2D>().isTrigger = true;
+                curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                curItem.GetComponent<Rigidbody2D>().gravityScale = 0;
+            }
+
+        }
+
+        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
+        {
+            curItem = owner.inven.currentHoldItem;
+            curItem.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+            curItem.transform.parent = null;
+            curItem.GetComponent<Collider2D>().isTrigger = false;
+            curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            curItem.GetComponent<Rigidbody2D>().gravityScale = 1;
+            owner.inven.currentHoldItem = null;
         }
     }
 

@@ -19,12 +19,13 @@ public enum ThrowType
 {
     Bomb,
     Item,
+    None,
 }
 
 public class Player : MonoBehaviour
 {
     PlayerState curState;
-    public ThrowType throwType;
+    [HideInInspector] public ThrowType throwType;
 
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
@@ -191,13 +192,13 @@ public class Player : MonoBehaviour
         hp -= damage;
         if(damage < 3)
         {
-            print(hp);
-            ChangeState(PlayerState.Hit);
+            
+            ChangeState(PlayerState.Idle);
         }
 
         else
         {
-            print(hp);
+            
             ChangeState(PlayerState.Idle);
         }
         

@@ -30,10 +30,4 @@ public class SitUpState : StateBase<Player>
 
     }
     
-    void SetBoxCol()
-    {
-        owner.triggeredCol.offset = new Vector2(-0.04287338f, -0.3467688f);
-        owner.triggeredCol.size = new Vector2(0.7462112f, 0.1726592f);
-    }
-    
 }

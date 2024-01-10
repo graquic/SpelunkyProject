@@ -13,7 +13,7 @@ public enum ItemType
 [RequireComponent(typeof(Rigidbody2D))]
 public class Item : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
 
     protected virtual void Awake()
     {
@@ -32,7 +32,13 @@ public class Item : MonoBehaviour
         {
             gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
         }
+    }
 
-
+    protected virtual void OnDisable()
+    {
+        if (GameManager.Instance.player.inven.currentHoldItem == this)
+        {
+            GameManager.Instance.player.inven.currentHoldItem = null;
+        }
     }
 }

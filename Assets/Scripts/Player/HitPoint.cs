@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HitPoint : MonoBehaviour
 {
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
@@ -15,4 +16,5 @@ public class HitPoint : MonoBehaviour
             }
         }
     }
+    */
 }

@@ -30,7 +30,7 @@ public class IdleState : StateBase<Player>
         CheckFall();
         CheckOnTheEdge();
         CheckAttack();
-        CheckThrowBomb();
+        CheckThrow();
     }
 
     void CheckMove()
@@ -91,11 +91,17 @@ public class IdleState : StateBase<Player>
         }
     }
 
-    void CheckThrowBomb()
+    void CheckThrow()
     {
-        if(owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+        if (owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
         {
             owner.throwType = ThrowType.Bomb;
+            owner.ChangeState(PlayerState.Throw);
+        }
+
+        else if(owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
+        {
+            owner.throwType = ThrowType.Item;
             owner.ChangeState(PlayerState.Throw);
         }
     }

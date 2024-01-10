@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ThrowState : StateBase<Player>
 {
@@ -17,39 +18,35 @@ public class ThrowState : StateBase<Player>
         switch(owner.throwType)
         {
             case ThrowType.Bomb:
-                ThrowBomb();
+                GameObject bomb = ObjectPoolManager.Instance.GetObject(PoolType.Bomb);
+                ThrowObject(bomb);
                 break;
             case ThrowType.Item:
-                ThrowItem();
+                ThrowObject(curItem.gameObject);
+                GameManager.Instance.player.inven.currentHoldItem = null;
                 break;
         }
-
-        owner.ChangeState(PlayerState.Idle);
     }
 
     public override void Exit()
     {
-        
+        owner.throwType = ThrowType.None;
     }
 
     public override void Update()
     {
-        
+        if (owner.CheckCurrentAnimationEnd())
+        {
+            owner.ChangeState(PlayerState.Idle);
+        }
     }
 
-    void ThrowBomb()
+    void ThrowObject(GameObject obj)
     {
-        GameObject obj = ObjectPoolManager.Instance.GetObject(PoolType.Bomb);
         obj.transform.parent = null;
         obj.transform.position = owner.throwPoint.transform.position;
 
-        Vector3 dir = obj.transform.TransformDirection(Vector3.right);
-        obj.GetComponent<Rigidbody2D>().AddForce(dir * owner.transform.localScale.x * owner.ThrowPower, ForceMode2D.Impulse);
+        obj.GetComponent<Rigidbody2D>().AddForce(Vector3.right * owner.transform.localScale.x * owner.ThrowPower, ForceMode2D.Impulse);
     }
 
-
-    void ThrowItem()
-    {
-        curItem.rb.AddForce(Vector2.right * owner.ThrowPower, ForceMode2D.Impulse);
-    }
 }

@@ -14,6 +14,7 @@ public class Bomb : Item
 
     [SerializeField] int boomRange;
     [SerializeField] int boomDmg;
+    [SerializeField] float bouncePower;
 
     SpriteRenderer sprite;
     Tilemap platformTileMap;
@@ -46,16 +47,13 @@ public class Bomb : Item
         boomParticle.transform.rotation = Quaternion.identity;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        
         sprite.enabled = true;
         transform.rotation = Quaternion.identity;
         GetComponent<Rigidbody2D>().gravityScale = 1;
-
-        if (GameManager.Instance.player.inven.currentHoldItem == this)
-        {
-            GameManager.Instance.player.inven.currentHoldItem = null;
-        }
+        base.OnDisable();
 
     }
 
@@ -68,8 +66,8 @@ public class Bomb : Item
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 sprite.enabled = false;
-
-                boomParticle.transform.transform.rotation = Quaternion.identity;
+                boomParticle.transform.rotation = Quaternion.identity;
+                transform.parent = null;
 
                 boomParticle.Stop();
                 boomParticle.Play();
@@ -98,6 +96,10 @@ public class Bomb : Item
 
                 if (collider.TryGetComponent<Player>(out Player player))
                 {
+                    Vector2 dir = (player.transform.position - transform.position).normalized;
+
+                    player.GetComponent<Rigidbody2D>().AddForce(dir * bouncePower, ForceMode2D.Impulse);
+
                     player.TakeDamage(boomDmg);
                 }
 

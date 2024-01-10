@@ -28,6 +28,7 @@ public class JumpState : StateBase<Player>
         CheckFall();
         CheckGrabEdge();
         CheckAttack();
+        CheckThrow();
     }
 
 
@@ -67,6 +68,20 @@ public class JumpState : StateBase<Player>
         if (Input.GetButtonDown("Attack"))
         {
             owner.ChangeState(PlayerState.Attack);
+        }
+    }
+    void CheckThrow()
+    {
+        if (owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+        {
+            owner.throwType = ThrowType.Bomb;
+            owner.ChangeState(PlayerState.Throw);
+        }
+
+        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
+        {
+            owner.throwType = ThrowType.Item;
+            owner.ChangeState(PlayerState.Throw);
         }
     }
 

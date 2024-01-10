@@ -12,6 +12,7 @@ public class AttackState : StateBase<Player>
     public override void Enter()
     {
         curHoldItem = owner.inven.currentHoldItem;
+        Debug.Log(GameManager.Instance.player.inven.currentHoldItem == null);
     }
 
     public override void Exit()
