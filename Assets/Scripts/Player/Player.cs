@@ -33,16 +33,19 @@ public class Player : MonoBehaviour
     public Transform hand;
     public Transform throwPoint;
 
-    public BoxCollider2D triggeredCol;
+    [SerializeField] List<PhysicsMaterial2D> pMaterials;
+    public List<PhysicsMaterial2D> PMaterials { get { return pMaterials; } }
 
-    [HideInInspector] public PlayerInventory inven;
-    [HideInInspector] public Rigidbody2D rb;
+    public PlayerInventory inven;
+
+
+    Rigidbody2D rb;
+    public Rigidbody2D Rb { get { return rb; } }
+    
+
     [HideInInspector] public PlayerCameraController camController;
     [SerializeField] TextMeshProUGUI text;  
     [SerializeField] Interactor interactor;
-
-
-    public GameObject checkGrabEdge;
 
     private int dir;
     public int Dir { get { return dir; } }
@@ -93,8 +96,6 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         camController = GetComponent<PlayerCameraController>();
         inven = GetComponent<PlayerInventory>();
-        
-        
 
         states[(int)PlayerState.Idle] = new IdleState(this);
         states[(int)PlayerState.Move] = new MoveState(this);
@@ -121,6 +122,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CheckDirection();
+        SetPhysicsMaterial();
 
         states[(int)curState].Update();
         
@@ -138,10 +140,18 @@ public class Player : MonoBehaviour
         states[(int)curState].Enter();
     }
 
+    public void ChangeAnimation(AttackType state)
+    {
+        // animator.SetTrigger(state.ToString());
+        animator.Play(state.ToString(), -1, 0);
+    }
+
     public bool CheckCurrentAnimationEnd()
     {
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
     }
+
+    
 
     void CheckDirection()
     {
@@ -168,23 +178,23 @@ public class Player : MonoBehaviour
     {
         inputX = Input.GetAxis("Horizontal");
 
-        if (rb.velocity.x > maxMoveSpeed && inputX > 0) return;
+        if (Rb.velocity.x > maxMoveSpeed && inputX > 0) return;
 
-        if (rb.velocity.x < -maxMoveSpeed && inputX < 0) return;
+        if (Rb.velocity.x < -maxMoveSpeed && inputX < 0) return;
 
 
-        rb.AddForce(new Vector2(inputX * MoveSpeed * Time.deltaTime, 0), ForceMode2D.Force);
+        Rb.AddForce(new Vector2(inputX * MoveSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
 
     public void InputSprintAddForce()
     {
         inputX = Input.GetAxis("Horizontal");
 
-        if (rb.velocity.x > maxSprintSpeed && inputX > 0) return;
+        if (Rb.velocity.x > maxSprintSpeed && inputX > 0) return;
 
-        if (rb.velocity.x < -maxSprintSpeed && inputX < 0) return;
+        if (Rb.velocity.x < -maxSprintSpeed && inputX < 0) return;
 
-        rb.AddForce(new Vector2(inputX * SprintSpeed * Time.deltaTime, 0), ForceMode2D.Force);
+        Rb.AddForce(new Vector2(inputX * SprintSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
 
     public void TakeDamage(int damage)
@@ -192,16 +202,27 @@ public class Player : MonoBehaviour
         hp -= damage;
         if(damage < 3)
         {
-            
             ChangeState(PlayerState.Idle);
         }
 
         else
         {
-            
             ChangeState(PlayerState.Idle);
         }
         
+    }
+
+    public void SetPhysicsMaterial()
+    {
+        if(curState == PlayerState.Jump || curState == PlayerState.Fall)
+        {
+            rb.sharedMaterial = pMaterials.Find((x) => x.name == "NoFriction");
+        }
+
+        else
+        {
+            rb.sharedMaterial = pMaterials.Find((x) => x.name == "PlayerFriction");
+        }
     }
 
     

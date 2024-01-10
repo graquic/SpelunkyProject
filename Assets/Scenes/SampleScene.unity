@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 51695234}
   - component: {fileID: 51695233}
   - component: {fileID: 51695232}
-  - component: {fileID: 51695235}
   - component: {fileID: 51695231}
   m_Layer: 9
   m_Name: Gun
@@ -208,7 +207,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &51695232
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -279,32 +278,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &51695235
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 51695230}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.501715, y: -0.004872471}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.08382478, y: 0.42804652}
-  m_EdgeRadius: 0
 --- !u!1 &60735498
 GameObject:
   m_ObjectHideFlags: 0
@@ -11650,7 +11623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectPools:
-  - poolType: 2
+  - poolType: 3
     poolPrefab: {fileID: 6190441688312694293, guid: b1c04ad6bbde67840ab6218763d86221, type: 3}
     initCount: 1
 --- !u!4 &1454967466
@@ -21823,6 +21796,18 @@ PrefabInstance:
     - target: {fileID: 1624230256, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624230258, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624230258, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.8625
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624230259, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1727079467, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
       propertyPath: m_Size.x

@@ -136,7 +136,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   boomRange: 3
   boomDmg: 4
-  bouncePower: 30
+  bouncePower: 20
 --- !u!95 &6190441688312694291
 Animator:
   serializedVersion: 5

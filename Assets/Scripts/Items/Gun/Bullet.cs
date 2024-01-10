@@ -2,17 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : Item
 {
-    // Start is called before the first frame update
-    void Start()
+    protected int damage = 2;
+
+    [SerializeField] float bulletSpeed;
+
+    [Header("총알의 생존 시간")]
+    float currentLifeTime = 0;
+    [SerializeField] float returnPoolTime;
+    protected override void Awake()
     {
-        
+        base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        rb.AddForce(Vector3.right * bulletSpeed, ForceMode2D.Impulse);
+
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        currentLifeTime += Time.deltaTime;
+
+        if(currentLifeTime >= returnPoolTime)
+        {
+            ObjectPoolManager.Instance.ReturnObject(PoolType.Bullet, gameObject);
+        }
+
+    }
+
+    protected override void OnDisable()
+    {
+        currentLifeTime = 0;
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.TryGetComponent<Player>(out Player player))
+        {
+            player.TakeDamage(damage);
+            
+        }
+
+        else if(collision.TryGetComponent<Enemy>(out Enemy enemy))
+        {
+            enemy.TakeDamage(damage);
+        }
+
+        ObjectPoolManager.Instance.ReturnObject(PoolType.Bullet, gameObject);
     }
 }

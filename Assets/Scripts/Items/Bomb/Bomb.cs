@@ -108,6 +108,17 @@ public class Bomb : Item
                     enemy.TakeDamage(boomDmg);
                 }
 
+                else if (collider.TryGetComponent<Bomb>(out Bomb bomb))
+                {
+                    SetEarlyBoom(bomb);
+                }
+
+                else if (collider.TryGetComponent<Item>(out Item item))
+                {
+                    Vector3 pos = (item.transform.position + new Vector3(0, 1.5f, 0) - transform.position).normalized;
+                    item.rb.AddForce(pos * bouncePower, ForceMode2D.Impulse);
+                }
+
                 else if (collider.tag == "Ground")
                 {
                     
@@ -129,6 +140,11 @@ public class Bomb : Item
             }
         }
 
+    }
+
+    public void SetEarlyBoom(Bomb bomb)
+    {
+        bomb.animator.Play("Start", -1, 1);
     }
    
 }

@@ -11,7 +11,7 @@ public class JumpState : StateBase<Player>
 
     public override void Enter()
     {
-        owner.rb.AddForce(new Vector2(0, owner.JumpPowerY), ForceMode2D.Impulse);
+        owner.Rb.AddForce(new Vector2(0, owner.JumpPowerY), ForceMode2D.Impulse);
     }
 
     public override void Exit()
@@ -34,7 +34,7 @@ public class JumpState : StateBase<Player>
 
     void CheckIdle()
     {
-        if (Mathf.Abs(owner.rb.velocity.x) < 0.05f && Mathf.Abs(owner.rb.velocity.y) < 0.05f) // move -> idle 과는 y값도 확인한다는 점에서 다름
+        if (Mathf.Abs(owner.Rb.velocity.x) == 0 && Mathf.Abs(owner.Rb.velocity.y) == 0) // move -> idle 과는 y값도 확인한다는 점에서 다름
         {
             owner.ChangeState(PlayerState.Idle);
         }
@@ -42,14 +42,14 @@ public class JumpState : StateBase<Player>
 
     void CheckMove()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 && owner.rb.velocity.y == 0 && owner.isGrounded)
+        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.isGrounded)
         {
             owner.ChangeState(PlayerState.Move);
         }
     }
     void CheckFall()
     {
-        if (owner.rb.velocity.y < -0.1f)
+        if (owner.Rb.velocity.y < -0.1f)
         {
             owner.ChangeState(PlayerState.Fall);
         }
@@ -65,24 +65,34 @@ public class JumpState : StateBase<Player>
 
     void CheckAttack()
     {
-        if (Input.GetButtonDown("Attack"))
+        if (owner.inven.CurrentHoldItem == null && Input.GetButtonDown("Attack"))
+        {
+            owner.ChangeState(PlayerState.Attack);
+        }
+
+        else if (owner.inven.CurrentHoldItem is Gun && Input.GetButtonDown("Attack"))
         {
             owner.ChangeState(PlayerState.Attack);
         }
     }
+
     void CheckThrow()
     {
-        if (owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+        if (owner.inven.CurrentHoldItem is Gun == false)
         {
-            owner.throwType = ThrowType.Bomb;
-            owner.ChangeState(PlayerState.Throw);
+            if (owner.inven.CurrentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+            {
+                owner.throwType = ThrowType.Bomb;
+                owner.ChangeState(PlayerState.Throw);
+            }
+
+            else if (owner.inven.CurrentHoldItem != null && Input.GetButtonDown("Attack"))
+            {
+                owner.throwType = ThrowType.Item;
+                owner.ChangeState(PlayerState.Throw);
+            }
         }
 
-        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
-        {
-            owner.throwType = ThrowType.Item;
-            owner.ChangeState(PlayerState.Throw);
-        }
     }
 
 }

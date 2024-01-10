@@ -7,9 +7,10 @@ using UnityEngine;
 public enum PoolType
 {
     Bullet,
+    BulletParticle,
     Enemy,
     Bomb,
-    BombParticle,
+    
 
 }
 
@@ -41,6 +42,10 @@ public class ObjectPoolManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        
+    }
+    private void Start()
+    {
         InitializePool();
     }
 

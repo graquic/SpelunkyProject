@@ -13,7 +13,8 @@ public class ThrowState : StateBase<Player>
 
     public override void Enter()
     {
-        curItem = owner.inven.currentHoldItem;
+        Debug.Log(2);
+        curItem = owner.inven.CurrentHoldItem;
 
         switch(owner.throwType)
         {
@@ -23,7 +24,7 @@ public class ThrowState : StateBase<Player>
                 break;
             case ThrowType.Item:
                 ThrowObject(curItem.gameObject);
-                GameManager.Instance.player.inven.currentHoldItem = null;
+                GameManager.Instance.player.inven.SetCurrentHoldItem(null);
                 break;
         }
     }
@@ -37,7 +38,9 @@ public class ThrowState : StateBase<Player>
     {
         if (owner.CheckCurrentAnimationEnd())
         {
-            owner.ChangeState(PlayerState.Idle);
+            CheckIdle();
+            CheckMove();
+            CheckFall();
         }
     }
 
@@ -47,6 +50,30 @@ public class ThrowState : StateBase<Player>
         obj.transform.position = owner.throwPoint.transform.position;
 
         obj.GetComponent<Rigidbody2D>().AddForce(Vector3.right * owner.transform.localScale.x * owner.ThrowPower, ForceMode2D.Impulse);
+        
+    }
+
+    void CheckIdle()
+    {
+        if (Mathf.Abs(owner.Rb.velocity.x) == 0 && Mathf.Abs(owner.Rb.velocity.y) == 0) // move -> idle 과는 y값도 확인한다는 점에서 다름
+        {
+            owner.ChangeState(PlayerState.Idle);
+        }
+    }
+
+    void CheckMove()
+    {
+        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.isGrounded)
+        {
+            owner.ChangeState(PlayerState.Move);
+        }
+    }
+    void CheckFall()
+    {
+        if (owner.Rb.velocity.y < -0.1f)
+        {
+            owner.ChangeState(PlayerState.Fall);
+        }
     }
 
 }

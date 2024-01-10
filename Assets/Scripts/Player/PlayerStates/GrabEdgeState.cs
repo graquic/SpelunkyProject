@@ -35,7 +35,7 @@ public class GrapEdgeState : StateBase<Player>
             {
                 Vector3 dir = new Vector3(owner.transform.position.x + owner.jumpXDist, owner.transform.position.y + jumpYdist) - owner.transform.position;
                 dir = dir.normalized;
-                owner.rb.AddForce(dir * owner.jumpXDist, ForceMode2D.Impulse);
+                owner.Rb.AddForce(dir * owner.jumpXDist, ForceMode2D.Impulse);
                 owner.ChangeState(PlayerState.Jump);
             }
         }
@@ -46,7 +46,7 @@ public class GrapEdgeState : StateBase<Player>
             {
                 Vector3 dir = new Vector3(owner.transform.position.x - owner.jumpXDist, owner.transform.position.y + jumpYdist) - owner.transform.position;
                 dir = dir.normalized;
-                owner.rb.AddForce(dir * owner.jumpXDist, ForceMode2D.Impulse);
+                owner.Rb.AddForce(dir * owner.jumpXDist, ForceMode2D.Impulse);
                 owner.ChangeState(PlayerState.Jump);
             }
         }
@@ -54,14 +54,14 @@ public class GrapEdgeState : StateBase<Player>
 
     void CheckFall()
     {
-        if (owner.rb.velocity.y < 0)
+        if (owner.Rb.velocity.y < 0)
         {
             owner.ChangeState(PlayerState.Fall);
         }
 
         if (Input.GetAxisRaw("Vertical") < 0 && Input.GetButtonDown("Jump"))
         {
-            owner.checkGrabEdge.GetComponent<BoxCollider2D>().isTrigger = true; // TODO
+            // owner.checkGrabEdge.GetComponent<BoxCollider2D>().isTrigger = true; // TODO
             owner.ChangeState(PlayerState.Fall);
         }
     }

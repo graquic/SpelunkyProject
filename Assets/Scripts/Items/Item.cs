@@ -36,9 +36,9 @@ public class Item : MonoBehaviour
 
     protected virtual void OnDisable()
     {
-        if (GameManager.Instance.player.inven.currentHoldItem == this)
+        if (GameManager.Instance.player.inven.CurrentHoldItem == this)
         {
-            GameManager.Instance.player.inven.currentHoldItem = null;
+            GameManager.Instance.player.inven.SetCurrentHoldItem(null);
         }
     }
 }

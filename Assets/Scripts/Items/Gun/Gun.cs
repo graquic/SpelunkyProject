@@ -52,29 +52,15 @@ public class Gun : Weapon
     {
         base.Update();
 
-        CheckDirection();
         SwitchCurrentAmmoSlot();
 
     }
-    /*
-    public IEnumerator FireCoroutine()
+    
+
+
+    public void Shoot()
     {
-        AmmoSlot curSlot;
-
-        while (true)
-        {
-           curSlot = ammoSlots[(int)curType];
-        }
-    }
-    */
-
-    private void CheckDirection()
-    {
-        if(player.inven.currentHoldItem == this)
-        {
-            transform.right = player.transform.right;
-
-        }
+        print(3);
     }
 
     public void SwitchCurrentAmmoSlot()

@@ -29,7 +29,7 @@ public class FallState : StateBase<Player>
 
     void CheckIdle()
     {
-        if (Mathf.Abs(owner.rb.velocity.y) < 0.05f && Mathf.Abs(owner.rb.velocity.x) < 0.05f && owner.isGrounded == true)
+        if (Mathf.Abs(owner.Rb.velocity.y) < 0.05f && Mathf.Abs(owner.Rb.velocity.x) < 0.05f && owner.isGrounded == true)
         {
             owner.ChangeState(PlayerState.Idle);
         }
@@ -37,7 +37,7 @@ public class FallState : StateBase<Player>
 
     void CheckMove()
     {
-        if (Mathf.Abs(owner.rb.velocity.y) < 0.05f && Mathf.Abs(owner.rb.velocity.x) >= 0.05f && owner.isGrounded == true)
+        if (Mathf.Abs(owner.Rb.velocity.y) < 0.05f && Mathf.Abs(owner.Rb.velocity.x) >= 0.05f && owner.isGrounded == true)
         {
             owner.ChangeState(PlayerState.Move);
         }

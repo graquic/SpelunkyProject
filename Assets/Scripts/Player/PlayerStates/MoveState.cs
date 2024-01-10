@@ -69,7 +69,7 @@ public class MoveState : StateBase<Player>
 
     protected void CheckFall()
     {
-        if (owner.rb.velocity.y < -0.1f)
+        if (owner.Rb.velocity.y < -0.1f)
         {
             owner.ChangeState(PlayerState.Fall);
         }
@@ -77,24 +77,31 @@ public class MoveState : StateBase<Player>
 
     void CheckAttack()
     {
-        if (Input.GetButtonDown("Attack"))
+        if (owner.inven.CurrentHoldItem != null)
         {
-            owner.ChangeState(PlayerState.Attack);
+            if (owner.inven.CurrentHoldItem is Gun && Input.GetButtonDown("Attack"))
+            {
+                owner.ChangeState(PlayerState.Attack);
+            }
         }
     }
 
     void CheckThrow()
     {
-        if (owner.inven.currentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+        if (owner.inven.CurrentHoldItem is Gun == false)
         {
-            owner.throwType = ThrowType.Bomb;
-            owner.ChangeState(PlayerState.Throw);
+            if (owner.inven.CurrentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+            {
+                owner.throwType = ThrowType.Bomb;
+                owner.ChangeState(PlayerState.Throw);
+            }
+
+            else if (owner.inven.CurrentHoldItem != null && Input.GetButtonDown("Attack"))
+            {
+                owner.throwType = ThrowType.Item;
+                owner.ChangeState(PlayerState.Throw);
+            }
         }
 
-        else if (owner.inven.currentHoldItem != null && Input.GetButtonDown("Attack"))
-        {
-            owner.throwType = ThrowType.Item;
-            owner.ChangeState(PlayerState.Throw);
-        }
     }
 }
