@@ -24,13 +24,15 @@ public class AmmoSlot
 
 public class Gun : Weapon
 {
+    [SerializeField] Transform shootPoint;
     [SerializeField] AmmoSlot[] ammoSlots;
     [SerializeField] float reloadDelay;
+    [SerializeField] float gunRecoil;
+
 
     SpriteRenderer sprite;
     AmmoType curType;
     bool canShoot = true;
-    Player player;
 
     protected override void Awake()
     {
@@ -43,9 +45,7 @@ public class Gun : Weapon
 
     private void Start()
     {
-        player = GameManager.Instance.player;
-
-        // StartCoroutine(FireCoroutine());
+        
     }
 
     protected override void Update()
@@ -53,14 +53,18 @@ public class Gun : Weapon
         base.Update();
 
         SwitchCurrentAmmoSlot();
-
     }
-    
-
-
-    public void Shoot()
+        
+    public void Shoot(Player player)
     {
-        print(3);
+        player.Rb.AddForce(Vector3.left * player.transform.localScale.x * gunRecoil, ForceMode2D.Impulse);
+
+        GameObject shotParticle = ObjectPoolManager.Instance.GetObject(PoolType.BulletParticle);
+        shotParticle.transform.position = shootPoint.transform.position + new Vector3(5f * player.transform.localScale.x, 0, 0);
+        shotParticle.transform.localScale = player.transform.localScale;
+
+        ParticleSystem particle = shotParticle.GetComponent<ParticleSystem>();
+        // yield return WaitForSeconds(particle.duration);
     }
 
     public void SwitchCurrentAmmoSlot()

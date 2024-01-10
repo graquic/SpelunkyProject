@@ -26,7 +26,7 @@ public class AttackState : StateBase<Player>
 
     public override void Exit()
     {
-
+        owner.SetWaitAnimation();
     }
 
     public override void Update()
@@ -54,7 +54,7 @@ public class AttackState : StateBase<Player>
         {
             owner.ChangeAnimation(AttackType.Shot);
             Debug.Log("Gun");
-            gun.Shoot();
+            gun.Shoot(owner);
         }
 
     }

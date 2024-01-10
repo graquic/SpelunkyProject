@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 {
     PlayerState curState;
     [HideInInspector] public ThrowType throwType;
+    [HideInInspector] public PlayerInventory inven;
 
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
 
@@ -36,7 +37,7 @@ public class Player : MonoBehaviour
     [SerializeField] List<PhysicsMaterial2D> pMaterials;
     public List<PhysicsMaterial2D> PMaterials { get { return pMaterials; } }
 
-    public PlayerInventory inven;
+    
 
 
     Rigidbody2D rb;
@@ -136,14 +137,22 @@ public class Player : MonoBehaviour
     {
         states[(int)curState].Exit();
         curState = state;
-        animator.SetInteger("State", (int)state);
         states[(int)curState].Enter();
+    }
+
+    public void ChangeAnimation(PlayerState state)
+    {
+        animator.Play(state.ToString());
     }
 
     public void ChangeAnimation(AttackType state)
     {
-        // animator.SetTrigger(state.ToString());
-        animator.Play(state.ToString(), -1, 0);
+        animator.Play(state.ToString());
+    }
+
+    public void SetWaitAnimation()
+    {
+        animator.Play("Wait");
     }
 
     public bool CheckCurrentAnimationEnd()

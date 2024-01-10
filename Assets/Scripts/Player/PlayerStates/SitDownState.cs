@@ -16,6 +16,7 @@ public class SitDownState : StateBase<Player>
 
     public override void Enter()
     {
+        owner.ChangeAnimation(PlayerState.SitDown);
         currentWaitTime = 0;        
         
         owner.transform.Find("Sprite").transform.position -= new Vector3(0, 0.3f, 0);
@@ -36,7 +37,6 @@ public class SitDownState : StateBase<Player>
 
     public override void Update()
     {
-        
         CheckSitUp();
         CheckFall();
 

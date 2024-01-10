@@ -13,11 +13,12 @@ public class IdleState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Idle);
     }
 
     public override void Exit()
     {
+
         currentEdgeWait = 0;
     }
 
@@ -31,6 +32,7 @@ public class IdleState : StateBase<Player>
         CheckOnTheEdge();
         CheckAttack();
         CheckThrow();
+
     }
 
     void CheckMove()

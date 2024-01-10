@@ -12,7 +12,7 @@ public class GrapEdgeState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.GrabEdge);
     }
 
     public override void Exit()
@@ -23,8 +23,12 @@ public class GrapEdgeState : StateBase<Player>
 
     public override void Update()
     {
-        CheckFall();
-        CheckJump();
+        if (owner.CheckCurrentAnimationEnd())
+        {
+            CheckFall();
+            CheckJump();
+        }
+            
     }
 
     void CheckJump()

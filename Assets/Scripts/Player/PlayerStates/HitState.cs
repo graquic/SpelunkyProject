@@ -10,7 +10,7 @@ public class HitState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Hit);
     }
 
     public override void Exit()

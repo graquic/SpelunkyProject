@@ -7,16 +7,18 @@ public class SprintState : MoveState
     public SprintState(Player player) : base(player)
     {
     }
+    public override void Enter()
+    {
+        owner.ChangeAnimation(PlayerState.Sprint);
+    }
 
     public override void Update()
     {
         owner.InputSprintAddForce();
 
-        CheckIdle();
+        base.Update();
+
         CheckMove();
-        CheckSit();
-        CheckJump();
-        CheckFall();
     }
 
     void CheckMove()
@@ -26,4 +28,6 @@ public class SprintState : MoveState
             owner.ChangeState(PlayerState.Move);
         }
     }
+
+    
 }

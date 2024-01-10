@@ -13,7 +13,8 @@ public class ThrowState : StateBase<Player>
 
     public override void Enter()
     {
-        Debug.Log(2);
+        owner.ChangeAnimation(PlayerState.Throw);
+
         curItem = owner.inven.CurrentHoldItem;
 
         switch(owner.throwType)

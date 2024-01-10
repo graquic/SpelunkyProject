@@ -261,6 +261,7 @@ MonoBehaviour:
     currentAmmoAmount: 0
     shotDelay: 0.3
   reloadDelay: 0.5
+  gunRecoil: 4
 --- !u!4 &51695234
 Transform:
   m_ObjectHideFlags: 0
@@ -21873,6 +21874,18 @@ PrefabInstance:
       propertyPath: throwPower
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 6117868551221371684, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: pMaterials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117868551221371684, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: pMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 6200000, guid: 0928021e9dc398b468512e83b4daefd3, type: 2}
+    - target: {fileID: 6117868551221371684, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
+      propertyPath: pMaterials.Array.data[1]
+      value: 
+      objectReference: {fileID: 6200000, guid: 8d4651adf2fbbc640b43e8b72f80b588, type: 2}
     - target: {fileID: 6117868551221371685, guid: 7e8ad04990bf18040afa771b3ad0b73c, type: 3}
       propertyPath: m_Name
       value: Player

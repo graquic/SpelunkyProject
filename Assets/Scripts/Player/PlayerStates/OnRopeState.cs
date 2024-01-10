@@ -10,7 +10,7 @@ public class OnRopeState : StateBase<Player>
 
     public override void Enter()
     {
-        
+        owner.ChangeAnimation(PlayerState.OnRope);
     }
 
     public override void Exit()
@@ -20,6 +20,10 @@ public class OnRopeState : StateBase<Player>
 
     public override void Update()
     {
-        
+        if (owner.CheckCurrentAnimationEnd())
+        {
+
+        }
+
     }
 }

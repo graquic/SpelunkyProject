@@ -11,6 +11,7 @@ public class JumpState : StateBase<Player>
 
     public override void Enter()
     {
+        owner.ChangeAnimation(PlayerState.Jump);
         owner.Rb.AddForce(new Vector2(0, owner.JumpPowerY), ForceMode2D.Impulse);
     }
 

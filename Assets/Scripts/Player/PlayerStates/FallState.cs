@@ -10,7 +10,7 @@ public class FallState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Fall);
     }
 
     public override void Exit()
@@ -25,6 +25,7 @@ public class FallState : StateBase<Player>
         CheckIdle();
         CheckMove();
         CheckGrabEdge();
+
     }
 
     void CheckIdle()

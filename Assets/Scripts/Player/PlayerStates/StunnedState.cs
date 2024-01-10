@@ -10,7 +10,7 @@ public class StunnedState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Stunned);
     }
 
     public override void Exit()
@@ -20,6 +20,10 @@ public class StunnedState : StateBase<Player>
 
     public override void Update()
     {
+        if (owner.CheckCurrentAnimationEnd())
+        {
+
+        }
 
     }
 }

@@ -14,7 +14,7 @@ public class MoveState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Move);
     }
 
     public override void Exit()
@@ -33,6 +33,7 @@ public class MoveState : StateBase<Player>
         CheckFall();
         CheckAttack();
         CheckThrow();
+
     }
 
 
@@ -75,18 +76,20 @@ public class MoveState : StateBase<Player>
         }
     }
 
-    void CheckAttack()
+    protected void CheckAttack()
     {
-        if (owner.inven.CurrentHoldItem != null)
+        if (owner.inven.CurrentHoldItem == null && Input.GetButtonDown("Attack"))
         {
-            if (owner.inven.CurrentHoldItem is Gun && Input.GetButtonDown("Attack"))
-            {
-                owner.ChangeState(PlayerState.Attack);
-            }
+            owner.ChangeState(PlayerState.Attack);
+        }
+
+        else if (owner.inven.CurrentHoldItem is Gun && Input.GetButtonDown("Attack"))
+        {
+            owner.ChangeState(PlayerState.Attack);
         }
     }
 
-    void CheckThrow()
+    protected void CheckThrow()
     {
         if (owner.inven.CurrentHoldItem is Gun == false)
         {

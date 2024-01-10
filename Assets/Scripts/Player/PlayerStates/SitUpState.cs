@@ -10,6 +10,7 @@ public class SitUpState : StateBase<Player>
 
     public override void Enter()
     {
+        owner.ChangeAnimation(PlayerState.SitUp);
         owner.camController.LookUp();
     }
 

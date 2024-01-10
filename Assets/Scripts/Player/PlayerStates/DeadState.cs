@@ -10,7 +10,7 @@ public class DeadState : StateBase<Player>
 
     public override void Enter()
     {
-
+        owner.ChangeAnimation(PlayerState.Dead);
     }
 
     public override void Exit()
