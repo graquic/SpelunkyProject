@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-interface IMoveable
+interface IDeathable
 {
-    public abstract void InputMove();
+    public abstract void Death();
 }

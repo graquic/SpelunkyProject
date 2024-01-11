@@ -8,7 +8,10 @@ public enum PoolType
 {
     Bullet,    
     Bomb,
-    Enemy,
+    Snake,
+    Bat,
+    Yeti,
+    CaveMan,
     ShotParticle,
     HitParticle,
 

@@ -58,39 +58,33 @@ public class Gun : Weapon
         SwitchCurrentAmmoSlot();
     }
 
-    /*
-    public IEnumerator Shoot(Player player)
+    public void Shoot(Player player)
+    {
+        StartCoroutine(Fire(player));
+    }
+
+    IEnumerator Fire(Player player)
     {
         if(canShoot == true)
         {
             canShoot = false;
 
-            player.Rb.AddForce(Vector3.left * player.transform.localScale.x * gunRecoil, ForceMode2D.Impulse);
+            int dir = player.Dir;
+            player.Rb.AddForce(Vector3.left * dir * gunRecoil, ForceMode2D.Impulse);
 
-            GameObject shotParticle = ObjectPoolManager.Instance.GetObject(PoolType.BulletParticle);
-            shotParticle.transform.position = shootPoint.transform.position + new Vector3(4.5f * player.transform.localScale.x, 0, 0);
-            shotParticle.transform.localScale = player.transform.localScale;
+            GameObject shotParticle = ObjectPoolManager.Instance.GetObject(PoolType.ShotParticle);
+            shotParticle.transform.position = shotPoint.transform.position + new Vector3(1.5f * player.Dir, 0, 0);
+            shotParticle.transform.localScale = player.transform.localScale * 0.4f;
+
+            GameObject bullet = ObjectPoolManager.Instance.GetObject(PoolType.Bullet);
+            bullet.transform.position = shotPoint.transform.position;
+            print(bullet.transform.position);
         }
         yield return new WaitForSeconds(reloadDelay);
 
         canShoot = true;
     }
-    */
-    public void Shoot(Player player)
-    {
-        int dir = player.Dir;
-        player.Rb.AddForce(Vector3.left * dir * gunRecoil, ForceMode2D.Impulse);
-        
-        GameObject shotParticle = ObjectPoolManager.Instance.GetObject(PoolType.ShotParticle);
-        shotParticle.transform.position = shotPoint.transform.position + new Vector3(1.5f * player.Dir, 0, 0);
-        shotParticle.transform.localScale = player.transform.localScale * 0.4f;
-        
-        GameObject bullet = ObjectPoolManager.Instance.GetObject(PoolType.Bullet);
-        bullet.transform.position = shotPoint.transform.position + new Vector3(1f * player.Dir, 0, 0);      
-        
-    }
-
-
+    
     public void SwitchCurrentAmmoSlot()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))

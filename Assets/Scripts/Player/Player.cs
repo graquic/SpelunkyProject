@@ -88,6 +88,8 @@ public class Player : MonoBehaviour
     [SerializeField] float throwPower;
     public float ThrowPower { get { return throwPower; } }
 
+    [SerializeField] float pushBackPower;
+
     
 
 
@@ -205,20 +207,45 @@ public class Player : MonoBehaviour
 
         Rb.AddForce(new Vector2(inputX * SprintSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
-
     public void TakeDamage(int damage)
     {
         hp -= damage;
-        if(damage < 3)
+        animator.SetTrigger("Hit");
+
+        if(damage > 2)
         {
-            ChangeState(PlayerState.Idle);
+            ChangeState(PlayerState.Stunned);
         }
 
-        else
+    }
+
+
+    public void TakeDamage(int damage, Vector3 AttackerPos)
+    {
+        hp -= damage;
+        animator.SetTrigger("Hit");
+        PushBack(AttackerPos);
+
+        if(damage > 2)
         {
-            ChangeState(PlayerState.Idle);
+            ChangeState(PlayerState.Stunned);
         }
         
+    }
+
+    void PushBack(Vector3 AttackerPos)
+    {
+        float diffX = transform.position.x - AttackerPos.x;
+        if (diffX < 0)
+        {
+            rb.AddForce(new Vector2(-pushBackPower, 1f), ForceMode2D.Impulse);
+        }
+        else if (diffX > 0)
+        {
+            rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse);
+        }
+
+        else { print("error"); rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse); }
     }
 
     public void SetPhysicsMaterial()

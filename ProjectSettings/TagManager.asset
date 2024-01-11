@@ -12,6 +12,7 @@ TagManager:
   - Rope
   - Item
   - Particle
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - IgnorePlayer
   - Particle
   - Bullet
-  - 
+  - Enemy
   - 
   - 
   - 

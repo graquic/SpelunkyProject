@@ -51,7 +51,7 @@ public class Bullet : Item
     {
         if (collision.collider.TryGetComponent<Player>(out Player player))
         {
-            player.TakeDamage(damage);
+            player.TakeDamage(damage,transform.position);
 
         }
 
