@@ -6,11 +6,12 @@ using UnityEngine;
 
 public enum PoolType
 {
-    Bullet,
-    BulletParticle,
-    Enemy,
+    Bullet,    
     Bomb,
-    
+    Enemy,
+    ShotParticle,
+    HitParticle,
+
 
 }
 

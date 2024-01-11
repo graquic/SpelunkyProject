@@ -11,6 +11,7 @@ TagManager:
   - BackgroundArea
   - Rope
   - Item
+  - Particle
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - Player
   - Item
   - IgnorePlayer
-  - 
-  - 
+  - Particle
+  - Bullet
   - 
   - 
   - 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 228367291}
   - component: {fileID: 228367292}
   - component: {fileID: 228367293}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BackgroundArea
   m_TagString: BackgroundArea
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1557160610}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 1624230257}
   - component: {fileID: 1624230259}
   - component: {fileID: 1624230258}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Whip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,9 +234,9 @@ GameObject:
   - component: {fileID: 1662543860157124248}
   - component: {fileID: 5635377715936680957}
   - component: {fileID: 4924390883929468995}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OnTheEdge
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4224897072855461375}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 6117868551221371680}
   - component: {fileID: 6117868551221371681}
   - component: {fileID: 6117868551221371683}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -405,15 +405,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   throwType: 0
+  inven: {fileID: 0}
   hand: {fileID: 1557160610}
   throwPoint: {fileID: 7093435065873213298}
-  triggeredCol: {fileID: 6117868551221371683}
-  inven: {fileID: 0}
-  rb: {fileID: 0}
+  pMaterials:
+  - {fileID: 6200000, guid: 0928021e9dc398b468512e83b4daefd3, type: 2}
+  - {fileID: 6200000, guid: 8d4651adf2fbbc640b43e8b72f80b588, type: 2}
   camController: {fileID: 0}
   text: {fileID: 0}
   interactor: {fileID: 1727079465}
-  checkGrabEdge: {fileID: 0}
   isGrounded: 0
   isOnTheEdge: 0
   isGrabEdge: 0
@@ -424,7 +424,7 @@ MonoBehaviour:
   maxSprintSpeed: 6
   jumpPowerX: 12
   jumpPowerY: 13
-  throwPower: 0
+  throwPower: 20
 --- !u!114 &499957462259387650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,7 +437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a213cc2764f8c144abb6ca01ab21b2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHoldItem: {fileID: 0}
 --- !u!114 &4721914674858330838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -556,7 +555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6117868552751317203}
   - component: {fileID: 6117868552751317202}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -642,7 +641,7 @@ GameObject:
   - component: {fileID: 1727079465}
   - component: {fileID: 1727079466}
   - component: {fileID: 1727079467}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Interactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +712,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.038744926, y: -0.09745908}
+  m_Offset: {x: 0.038744926, y: -0.50475544}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -724,7 +723,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1072941, y: 1.151603}
+  m_Size: {x: 0.7496681, y: 0.33701026}
   m_EdgeRadius: 0
 --- !u!1 &7302017073650098639
 GameObject:
@@ -737,7 +736,7 @@ GameObject:
   - component: {fileID: 6118976409849899971}
   - component: {fileID: 4421824329764357558}
   - component: {fileID: 1031348103}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -850,7 +849,7 @@ GameObject:
   - component: {fileID: 3232041777507009989}
   - component: {fileID: 117166875614569557}
   - component: {fileID: 6303145095157725524}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HitPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

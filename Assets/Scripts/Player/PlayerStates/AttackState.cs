@@ -47,13 +47,11 @@ public class AttackState : StateBase<Player>
         if(curHoldItem == null)
         {
             owner.ChangeAnimation(AttackType.Whip);
-            Debug.Log("Whip");
         }
 
         else if(curHoldItem is Gun gun)
         {
             owner.ChangeAnimation(AttackType.Shot);
-            Debug.Log("Gun");
             gun.Shoot(owner);
         }
 

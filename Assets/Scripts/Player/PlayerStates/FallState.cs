@@ -26,6 +26,9 @@ public class FallState : StateBase<Player>
         CheckMove();
         CheckGrabEdge();
 
+        CheckAttack();
+        CheckThrow();
+
     }
 
     void CheckIdle()
@@ -50,5 +53,37 @@ public class FallState : StateBase<Player>
         {
             owner.ChangeState(PlayerState.GrabEdge);
         }
+    }
+
+    void CheckAttack()
+    {
+        if (owner.inven.CurrentHoldItem == null && Input.GetButtonDown("Attack"))
+        {
+            owner.ChangeState(PlayerState.Attack);
+        }
+
+        else if (owner.inven.CurrentHoldItem is Gun && Input.GetButtonDown("Attack"))
+        {
+            owner.ChangeState(PlayerState.Attack);
+        }
+    }
+
+    void CheckThrow()
+    {
+        if (owner.inven.CurrentHoldItem is Gun == false)
+        {
+            if (owner.inven.CurrentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
+            {
+                owner.throwType = ThrowType.Bomb;
+                owner.ChangeState(PlayerState.Throw);
+            }
+
+            else if (owner.inven.CurrentHoldItem != null && Input.GetButtonDown("Attack"))
+            {
+                owner.throwType = ThrowType.Item;
+                owner.ChangeState(PlayerState.Throw);
+            }
+        }
+
     }
 }

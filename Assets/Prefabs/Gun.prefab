@@ -50,20 +50,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  shotPoint: {fileID: 2112137890175136084}
   ammoSlots:
   - ammoType: 0
     ammoAmount: 15
-    currentAmmoAmount: 0
     shotDelay: 0.1
   - ammoType: 1
     ammoAmount: 5
-    currentAmmoAmount: 0
     shotDelay: 0.5
   - ammoType: 2
     ammoAmount: 15
-    currentAmmoAmount: 0
     shotDelay: 0.3
   reloadDelay: 0.5
+  shotDelay: 0.5
+  gunRecoil: 4
 --- !u!61 &2112137889741190801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &2112137890175136085
 GameObject:
   m_ObjectHideFlags: 0

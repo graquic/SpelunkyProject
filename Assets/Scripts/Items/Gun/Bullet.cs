@@ -18,7 +18,8 @@ public class Bullet : Item
 
     private void OnEnable()
     {
-        rb.AddForce(Vector3.right * bulletSpeed, ForceMode2D.Impulse);
+        int dir = GameManager.Instance.player.Dir;
+        rb.AddForce(Vector3.right * bulletSpeed * dir, ForceMode2D.Impulse);
 
     }
 
@@ -43,16 +44,25 @@ public class Bullet : Item
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent<Player>(out Player player))
+        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.TryGetComponent<Player>(out Player player))
         {
             player.TakeDamage(damage);
-            
+
         }
 
-        else if(collision.TryGetComponent<Enemy>(out Enemy enemy))
+        else if (collision.collider.TryGetComponent<Enemy>(out Enemy enemy))
         {
             enemy.TakeDamage(damage);
         }
+
+        print(collision.gameObject.name);
+        GameObject hitParticle = ObjectPoolManager.Instance.GetObject(PoolType.HitParticle);
+        hitParticle.transform.position = transform.position;
 
         ObjectPoolManager.Instance.ReturnObject(PoolType.Bullet, gameObject);
     }

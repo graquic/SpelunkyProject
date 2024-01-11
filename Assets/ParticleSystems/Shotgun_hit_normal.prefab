@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5761265478074202058}
   - component: {fileID: 5761265478074202059}
   - component: {fileID: 5761265478074202056}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Shotgun_hit_normal
-  m_TagString: Untagged
+  m_TagString: Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
