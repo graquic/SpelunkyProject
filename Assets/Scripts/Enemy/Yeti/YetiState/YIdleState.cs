@@ -2,17 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YIdleState : MonoBehaviour
+public class YIdleState : StateBase<Yeti>
 {
-    // Start is called before the first frame update
-    void Start()
+    public YIdleState(Yeti owner) : base(owner)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    float maxWaitToMoveTime;
+    float currentWaitToMoveTime;
+
+    public override void Enter()
     {
-        
+        owner.ChangeAnimation(YetiState.YIdle);
+
+        maxWaitToMoveTime = 0;
+        currentWaitToMoveTime = 0;
     }
+
+    public override void Update()
+    {
+        CheckDeath();
+
+        currentWaitToMoveTime += Time.deltaTime;
+
+        if (maxWaitToMoveTime == 0)
+        {
+            maxWaitToMoveTime = Random.Range(2, 5);
+        }
+
+        if(currentWaitToMoveTime >= maxWaitToMoveTime)
+        {
+            owner.ChangeState(YetiState.YMove);
+        }
+
+
+    }
+
+    public override void Exit()
+    {
+        maxWaitToMoveTime = 0;
+        currentWaitToMoveTime = 0;
+    }
+
+    void CheckDeath()
+    {
+        if(owner.Hp <= 0)
+        {
+            owner.ChangeState(YetiState.YDeath);
+        }
+    }
+
 }

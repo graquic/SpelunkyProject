@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance{ get; private set; }
 
+    Enemy attackerInfo;
+    public Enemy AttackerInfo { get{ return attackerInfo; } }
+
     public Player player;
 
     private void Awake()
@@ -24,5 +27,10 @@ public class GameManager : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
         
+    }
+
+    public void SetAttackerInfo(Enemy enemy)
+    {
+        attackerInfo = enemy;
     }
 }

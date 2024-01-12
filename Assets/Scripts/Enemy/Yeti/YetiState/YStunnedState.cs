@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YSmashState : StateBase<Yeti>
+public class YStunnedState : StateBase<Yeti>
 {
-    public YSmashState(Yeti owner) : base(owner)
+    public YStunnedState(Yeti owner) : base(owner)
     {
     }
 
     public override void Enter()
     {
+        owner.ChangeAnimation(YetiState.YStunned);
+    }
 
-        owner.ChangeDirection(owner.TargetPlayer);
-        owner.ChangeAnimation(YetiState.YSmash);
-        owner.Attack(owner.TargetPlayer);
+    public override void Exit()
+    {
+        
     }
 
     public override void Update()
@@ -23,9 +25,4 @@ public class YSmashState : StateBase<Yeti>
             owner.ChangeState(YetiState.YIdle);
         }
     }
-    public override void Exit()
-    {
-
-    }
-
 }

@@ -90,7 +90,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] float pushBackPower;
 
-    
+
+    private bool isSmashed;
+    public bool IsSmashed { get { return isSmashed; } }
 
 
     private void Awake()
@@ -150,6 +152,11 @@ public class Player : MonoBehaviour
     public void ChangeAnimation(AttackType state)
     {
         animator.Play(state.ToString());
+    }
+
+    public void ChangeAnimation(String animationName)
+    {
+        animator.Play(animationName);
     }
 
     public void SetWaitAnimation()
@@ -219,7 +226,6 @@ public class Player : MonoBehaviour
 
     }
 
-
     public void TakeDamage(int damage, Vector3 AttackerPos)
     {
         hp -= damage;
@@ -261,6 +267,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void SetIsSmashed(bool isSmashed)
+    {
+        this.isSmashed = isSmashed;
+    }
+
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -276,6 +287,20 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(isSmashed == true)
+        {
+            if (collision.collider.tag == "Ground" || collision.collider.tag == "Wall")
+            {
+                isSmashed = false;
+                TakeDamage(GameManager.Instance.AttackerInfo.Damage);
+                GameManager.Instance.SetAttackerInfo(null);
+            }
+        }
+        
     }
 }
 

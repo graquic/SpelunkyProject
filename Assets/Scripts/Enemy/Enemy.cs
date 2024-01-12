@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,15 +8,18 @@ public abstract class Enemy : MonoBehaviour
 {
     [Header("체력")]
     [SerializeField] protected int hp;
+    public int Hp { get { return hp; } }
 
     [Header("공격력")]
     [SerializeField] protected int damage;
+    public int Damage { get { return damage; } }
 
     [Header("감지 범위")]
     [SerializeField] protected float detectRange;
 
     protected Rigidbody2D rb;
-    protected bool isFlipped;
+    protected int dir;
+    public int Dir { get { return dir; } }
 
     protected virtual void Awake()
     {
@@ -29,20 +33,18 @@ public abstract class Enemy : MonoBehaviour
 
     protected void ModifyDirection()
     {
-        if (rb.velocity.x > 0 && isFlipped == true)
+        if (rb.velocity.x > 0 && transform.localScale.x < 0)
         {
-            isFlipped = false;
             float x = Mathf.Abs(transform.localScale.x);
-            transform.localScale = new Vector2(x, transform.localScale.y);
-
+            transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
         }
-        else if (rb.velocity.x < 0 && isFlipped == false)
+        else if (rb.velocity.x < 0 && transform.localScale.x > 0)
         {
-            isFlipped = true;
             float x = - Mathf.Abs(transform.localScale.x);
-            transform.localScale = new Vector2(x, transform.localScale.y);
-
+            transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
         }
+        
+        dir = (int)transform.localScale.x;
     }
 
 

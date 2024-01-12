@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: YIdle
+  m_Name: BackHit
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,9 +20,7 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -742501569, guid: 461b89348dcfde546b3579699bd42bf4, type: 3}
-    - time: 1
-      value: {fileID: -742501569, guid: 461b89348dcfde546b3579699bd42bf4, type: 3}
+      value: {fileID: -851862039, guid: 5c2b9f6ea58030e40a2bf82ca005c4f4, type: 3}
     attribute: m_Sprite
     path: Sprite
     classID: 212
@@ -42,14 +40,13 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -742501569, guid: 461b89348dcfde546b3579699bd42bf4, type: 3}
-    - {fileID: -742501569, guid: 461b89348dcfde546b3579699bd42bf4, type: 3}
+    - {fileID: -851862039, guid: 5c2b9f6ea58030e40a2bf82ca005c4f4, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.0166667
+    m_StopTime: 0.016666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

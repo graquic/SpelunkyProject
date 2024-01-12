@@ -77,7 +77,7 @@ public class SitDownState : StateBase<Player>
     {
         if (owner.inven.CurrentHoldItem == null && Input.GetButtonDown("Attack"))
         {
-            Item closestItem = owner.inven.FindClosestItem();
+            Item closestItem = owner.inven.FindClosestObject();
 
             if(closestItem != null) // 아이템 돌려놓기
             {

@@ -28,9 +28,11 @@ public class Gun : Weapon
     [SerializeField] float reloadDelay;
     [SerializeField] float shotDelay;
     [SerializeField] float gunRecoil;
-
+    /*
     SpriteRenderer sprite;
     AmmoType curType;
+    */
+
     bool canShoot = true;
 
     float currentWaitDelay = 0;
@@ -39,9 +41,11 @@ public class Gun : Weapon
     {
         base.Awake();
 
+        /*
         sprite = GetComponentInChildren<SpriteRenderer>();
 
         curType = AmmoType.Pistol;
+        */
     }
 
     private void Start()
@@ -55,7 +59,6 @@ public class Gun : Weapon
 
         currentWaitDelay += Time.deltaTime;
 
-        SwitchCurrentAmmoSlot();
     }
 
     public void Shoot(Player player)
@@ -78,13 +81,15 @@ public class Gun : Weapon
 
             GameObject bullet = ObjectPoolManager.Instance.GetObject(PoolType.Bullet);
             bullet.transform.position = shotPoint.transform.position;
-            print(bullet.transform.position);
-        }
-        yield return new WaitForSeconds(reloadDelay);
 
-        canShoot = true;
+            yield return new WaitForSeconds(shotDelay);
+
+            canShoot = true;
+        }
+        
     }
     
+    /*
     public void SwitchCurrentAmmoSlot()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
@@ -102,6 +107,7 @@ public class Gun : Weapon
             curType = AmmoType.Rifle;
         }
     }
+    */
 
    
 }

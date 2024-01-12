@@ -56,10 +56,7 @@ public class Snake : Enemy
                 if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
                 {
                     canAttack = true;
-                    /*
-                    if (dist < detectRange && CheckFrontPlayer(player.transform.position))
-                    { curState = SnakeState.Attack; }
-                    */
+                    
                     curState = SnakeState.Move;
                 }
                 break;

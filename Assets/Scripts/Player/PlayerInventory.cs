@@ -36,7 +36,7 @@ public class PlayerInventory :MonoBehaviour
         currentHoldItem = item;
     }
 
-    public Item FindClosestItem()
+    public Item FindClosestObject()
     {
         Item closestItem = null;
         float minDist = 999;
@@ -59,6 +59,18 @@ public class PlayerInventory :MonoBehaviour
                     closestItem = item;
                 }
             }
+            /*
+            else if(col.gameObject.TryGetComponent<Yeti>(out Yeti yeti) && yeti.CurState == YetiState.YDeath)
+            {
+                float dist = Vector2.Distance(col.transform.position, player.transform.position);
+
+                if (minDist > dist)
+                {
+                    minDist = dist;
+                    closestItem = yeti;
+                }
+            }
+            */
         }
 
         return closestItem;

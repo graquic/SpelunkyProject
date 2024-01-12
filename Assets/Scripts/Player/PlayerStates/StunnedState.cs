@@ -10,7 +10,7 @@ public class StunnedState : StateBase<Player>
 
     public override void Enter()
     {
-        owner.ChangeAnimation(PlayerState.Stunned);
+        CheckStunnedPose();
     }
 
     public override void Exit()
@@ -25,5 +25,20 @@ public class StunnedState : StateBase<Player>
 
         }
 
+    }
+
+    void CheckStunnedPose()
+    {
+        if((owner.Rb.velocity.x < 0 && owner.transform.localScale.x > 0)
+            || (owner.Rb.velocity.x > 0 && owner.transform.localScale.x < 0))
+        {
+            owner.ChangeAnimation("FrontHit");
+        }
+
+        else if((owner.Rb.velocity.x > 0 && owner.transform.localScale.x > 0) 
+            || (owner.Rb.velocity.x < 0 && owner.transform.localScale.x < 0))
+        {
+            owner.ChangeAnimation("BackHit");
+        }
     }
 }
