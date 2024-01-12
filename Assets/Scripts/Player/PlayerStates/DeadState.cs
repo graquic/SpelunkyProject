@@ -12,13 +12,12 @@ public class DeadState : StateBase<Player>
     {
         owner.ChangeAnimation(PlayerState.Dead);
     }
-
-    public override void Exit()
+    public override void Update()
     {
 
     }
 
-    public override void Update()
+    public override void Exit()
     {
 
     }

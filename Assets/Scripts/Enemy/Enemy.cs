@@ -28,17 +28,17 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        ModifyDirection();
+        // ModifyDirection();
     }
 
     protected void ModifyDirection()
     {
-        if (rb.velocity.x > 0 && transform.localScale.x < 0)
+        if (rb.velocity.x > 0.1f && transform.localScale.x < 0)
         {
             float x = Mathf.Abs(transform.localScale.x);
             transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
         }
-        else if (rb.velocity.x < 0 && transform.localScale.x > 0)
+        else if (rb.velocity.x < 0.1f && transform.localScale.x > 0)
         {
             float x = - Mathf.Abs(transform.localScale.x);
             transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);

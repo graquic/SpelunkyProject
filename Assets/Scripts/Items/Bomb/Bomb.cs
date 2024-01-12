@@ -96,16 +96,15 @@ public class Bomb : Item
 
                 if (collider.TryGetComponent<Player>(out Player player))
                 {
-                    Vector2 dir = (player.transform.position - transform.position).normalized;
-
-                    player.GetComponent<Rigidbody2D>().AddForce(dir * bouncePower, ForceMode2D.Impulse);
-
                     player.TakeDamage(boomDmg);
+
+                    PushFarAway(player.transform);
                 }
 
                 else if (collider.TryGetComponent<Enemy>(out Enemy enemy))
                 {
                     enemy.TakeDamage(boomDmg);
+                    PushFarAway(enemy.transform);
                 }
 
                 else if (collider.TryGetComponent<Bomb>(out Bomb bomb))
@@ -145,6 +144,13 @@ public class Bomb : Item
     public void SetEarlyBoom(Bomb bomb)
     {
         bomb.animator.Play("Start", -1, 1);
+    }
+
+    void PushFarAway(Transform target)
+    {
+        Vector2 dir = (target.position - transform.position).normalized;
+
+        target.GetComponent<Rigidbody2D>().AddForce(dir * bouncePower, ForceMode2D.Impulse);
     }
    
 }

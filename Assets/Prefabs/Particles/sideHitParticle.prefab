@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5557425664878321730}
   - component: {fileID: 5557425664878321731}
   m_Layer: 0
-  m_Name: sideHitParticle
+  m_Name: SideHitParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

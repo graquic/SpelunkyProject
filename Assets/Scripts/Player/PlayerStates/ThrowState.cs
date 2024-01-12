@@ -64,7 +64,7 @@ public class ThrowState : StateBase<Player>
 
     void CheckMove()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.isGrounded)
+        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.IsGrounded)
         {
             owner.ChangeState(PlayerState.Move);
         }

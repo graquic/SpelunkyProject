@@ -1,35 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitParticle : MonoBehaviour
+public class HitParticle : FixedPosParticles
 {
-    ParticleSystem hitParticle;
-
-    float currentWaitTime;
-
-    private void Awake()
+    protected override void Awake()
     {
-        hitParticle = GetComponent<ParticleSystem>();
+        base.Awake();
+
+        thisPoolType = PoolType.HitParticle;
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        hitParticle.Play();
+        base.OnEnable();
     }
 
-    private void Update()
+    protected override void Update()
     {
-        currentWaitTime += Time.deltaTime;
+        base.Update();
+        
+    }
 
-        if(currentWaitTime > hitParticle.main.duration)
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    void CheckParticleName()
+    {
+        PoolType[] types = (PoolType[])Enum.GetValues(typeof(PoolType));
+
+        foreach(PoolType type in types)
         {
-            ObjectPoolManager.Instance.ReturnObject(PoolType.HitParticle, gameObject);
-        }
-    }
+            print(type.ToString());
 
-    private void OnDisable()
-    {
-        currentWaitTime = 0;
-        hitParticle.Stop();
+            if(type.ToString() == gameObject.name)
+            {
+                thisPoolType = type;                
+            }
+        }
     }
 }

@@ -79,7 +79,7 @@ public class IdleState : StateBase<Player>
     {
         currentEdgeWait += Time.deltaTime;
 
-        if (owner.isGrounded == true && owner.isOnTheEdge == true && currentEdgeWait >= maxEdgeWait)
+        if (owner.IsGrounded == true && owner.IsOnTheEdge == true && currentEdgeWait >= maxEdgeWait)
         {
             owner.ChangeState(PlayerState.OnTheEdge);
         }

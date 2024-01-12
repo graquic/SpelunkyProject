@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8009810557976228650}
   - component: {fileID: 8009810557976228651}
   m_Layer: 11
-  m_Name: shotgunParticle
+  m_Name: ShotgunParticle
   m_TagString: Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

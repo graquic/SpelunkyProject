@@ -12,7 +12,7 @@ public class YDeathState : StateBase<Yeti>
     {
         owner.ChangeAnimation(YetiState.YDeath);
 
-        owner.gameObject.layer = LayerMask.NameToLayer("Item");
+        owner.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
     }
 
     public override void Exit()

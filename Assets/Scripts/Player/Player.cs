@@ -51,12 +51,14 @@ public class Player : MonoBehaviour
     private int dir;
     public int Dir { get { return dir; } }
 
-    private int hp;
+    [SerializeField] private int hp;
     public int HP { get { return hp; } }
 
     [Header("bool 변수들")]
-    public bool isGrounded;
-    public bool isOnTheEdge;
+    [SerializeField] private bool isGrounded;
+    public bool IsGrounded { get { return isGrounded; } }
+    [SerializeField] private bool isOnTheEdge;
+    public bool IsOnTheEdge { get { return isOnTheEdge; } }
     public bool isGrabEdge;
     public bool isFlipped;
 
@@ -133,7 +135,7 @@ public class Player : MonoBehaviour
         
         //디버깅용 텍스트
         text.text = curState.ToString();
-        
+
         
     }
 
@@ -159,17 +161,16 @@ public class Player : MonoBehaviour
         animator.Play(animationName);
     }
 
-    public void SetWaitAnimation()
-    {
-        animator.Play("Wait");
-    }
+    
 
     public bool CheckCurrentAnimationEnd()
     {
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
     }
-
-    
+    public bool CheckCurrentAnimationWait()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("Wait");
+    }
 
     void CheckDirection()
     {
@@ -261,6 +262,11 @@ public class Player : MonoBehaviour
             rb.sharedMaterial = pMaterials.Find((x) => x.name == "NoFriction");
         }
 
+        else if(curState == PlayerState.Stunned)
+        {
+            rb.sharedMaterial = pMaterials.Find((x) => x.name == "StunnedBounce");
+        }
+
         else
         {
             rb.sharedMaterial = pMaterials.Find((x) => x.name == "PlayerFriction");
@@ -270,6 +276,10 @@ public class Player : MonoBehaviour
     public void SetIsSmashed(bool isSmashed)
     {
         this.isSmashed = isSmashed;
+    }
+    public void SetIsOnTheEdge(bool isOnTheEdge)
+    {
+        this.isOnTheEdge = isOnTheEdge;
     }
 
     

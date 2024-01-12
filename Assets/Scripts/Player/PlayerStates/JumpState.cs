@@ -43,7 +43,7 @@ public class JumpState : StateBase<Player>
 
     void CheckMove()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.isGrounded)
+        if (Input.GetAxisRaw("Horizontal") != 0 && owner.Rb.velocity.y == 0 && owner.IsGrounded)
         {
             owner.ChangeState(PlayerState.Move);
         }
@@ -58,7 +58,7 @@ public class JumpState : StateBase<Player>
 
     void CheckGrabEdge()
     {
-        if (owner.isGrounded == false && owner.isGrabEdge == true)
+        if (owner.IsGrounded == false && owner.isGrabEdge == true)
         {
             owner.ChangeState(PlayerState.GrabEdge);
         }

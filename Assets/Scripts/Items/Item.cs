@@ -11,7 +11,7 @@ public enum ItemType
 }
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour , IHoldable
 {
     [HideInInspector] public Rigidbody2D rb;
 
@@ -40,5 +40,10 @@ public class Item : MonoBehaviour
         {
             GameManager.Instance.player.inven.SetCurrentHoldItem(null);
         }
+    }
+
+    public void SetHoldItem(Player player)
+    {
+        
     }
 }

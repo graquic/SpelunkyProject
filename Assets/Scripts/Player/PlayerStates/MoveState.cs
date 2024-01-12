@@ -62,7 +62,7 @@ public class MoveState : StateBase<Player>
 
     protected void CheckJump()
     {
-        if (owner.isGrounded && Input.GetButtonDown("Jump"))
+        if (owner.IsGrounded && Input.GetButtonDown("Jump"))
         {
             owner.ChangeState(PlayerState.Jump);
         }

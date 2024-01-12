@@ -13,17 +13,17 @@ public class CheckOnTheEdge : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Ground")
+        if(player.IsGrounded == true && collision.tag == "Ground")
         {
-            player.isOnTheEdge = false;
+            player.SetIsOnTheEdge(false);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "Ground")
+        if(player.IsGrounded == true && collision.tag == "Ground")
         {
-            player.isOnTheEdge = true;
+            player.SetIsOnTheEdge(true);
         }
     }
 

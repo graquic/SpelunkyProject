@@ -7,6 +7,14 @@ public class StunnedState : StateBase<Player>
     public StunnedState(Player owner) : base(owner)
     {
     }
+    private enum StunnedType
+    {
+        Pushed,
+        HitFall, 
+        Stunned,
+    }
+
+    StunnedType curState;
 
     public override void Enter()
     {
@@ -20,9 +28,36 @@ public class StunnedState : StateBase<Player>
 
     public override void Update()
     {
-        if (owner.CheckCurrentAnimationEnd())
+        switch(curState)
         {
+            case StunnedType.Pushed:
+                if (owner.IsSmashed == false && owner.Rb.velocity.y < -0.2f)
+                {
+                    curState = StunnedType.HitFall;
+                    owner.ChangeAnimation("HitFall");
+                }
 
+                else if (owner.IsSmashed == false && owner.Rb.velocity.x < 0.05f && owner.Rb.velocity.y < 0.05f && owner.IsGrounded == true)
+                {
+                    curState = StunnedType.Stunned;
+                    owner.ChangeAnimation("Stunned");
+                }
+                break;
+
+            case StunnedType.HitFall:
+                if (owner.Rb.velocity.x < 0.05f && owner.Rb.velocity.y < 0.05f && owner.IsGrounded == true)
+                {
+                    curState = StunnedType.Stunned;
+                    owner.ChangeAnimation("Stunned");
+                }
+            break;
+
+            case StunnedType.Stunned:
+                if(owner.CheckCurrentAnimationWait())
+                {
+                    owner.ChangeState(PlayerState.Idle);
+                }
+            break;
         }
 
     }
@@ -40,5 +75,7 @@ public class StunnedState : StateBase<Player>
         {
             owner.ChangeAnimation("BackHit");
         }
+
+        curState = StunnedType.Pushed;
     }
 }

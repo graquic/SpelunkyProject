@@ -11,14 +11,14 @@ public class YSmashState : StateBase<Yeti>
     public override void Enter()
     {
 
-        owner.ChangeDirection(owner.TargetPlayer);
-        owner.ChangeAnimation(YetiState.YSmash);
+        owner.ChangeDirectionToPlayer(owner.TargetPlayer);
+        CheckSmashAnimation();
         owner.Attack(owner.TargetPlayer);
     }
 
     public override void Update()
     {
-        if(owner.CheckCurrentAnimationEnd())
+        if(owner.CheckCurrentAnimationWait())
         {
             owner.ChangeState(YetiState.YIdle);
         }
@@ -26,6 +26,21 @@ public class YSmashState : StateBase<Yeti>
     public override void Exit()
     {
 
+    }
+
+    void CheckSmashAnimation()
+    {
+        Vector3 playerPos = owner.TargetPlayer.transform.position;
+        float diffX = Mathf.Abs(playerPos.x - owner.transform.position.x);
+
+        if ((playerPos.y > owner.transform.position.y + 1f) && diffX < 0.6f)
+        {
+            owner.ChangeAnimation("YSmashUpper");
+        }
+        else
+        {
+            owner.ChangeAnimation(YetiState.YSmash);
+        }
     }
 
 }

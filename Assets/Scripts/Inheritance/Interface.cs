@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-interface IDeathable
+interface IHoldable
 {
-    public abstract void Death();
+    public abstract void SetHoldItem(Player player);
 }

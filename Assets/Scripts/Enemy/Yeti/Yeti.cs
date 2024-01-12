@@ -11,7 +11,7 @@ public enum YetiState
     YIdle, YMove, YSmash, YStunned, YDeath
 }
 
-public class Yeti : Enemy
+public class Yeti : Enemy, IHoldable
 {
     YetiState curState;
     public YetiState CurState { get { return curState; } }
@@ -24,7 +24,6 @@ public class Yeti : Enemy
 
     [SerializeField] float moveSpeed;
     [SerializeField] int smashPower;
-    [SerializeField] TextMeshProUGUI testText;
     
     int moveDir;
     public int MoveDir { get { return moveDir; } }
@@ -48,8 +47,6 @@ public class Yeti : Enemy
 
     protected override void Update()
     {
-        testText.text = curState.ToString();
-
         base.Update();
 
         states[(int)curState].Update();
@@ -78,6 +75,11 @@ public class Yeti : Enemy
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
     }
 
+    public bool CheckCurrentAnimationWait()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("Wait");
+    }
+
     public void SetMoveDirection()
     {
         moveDir = UnityEngine.Random.Range(0, 2) * 2 - 1;
@@ -85,37 +87,50 @@ public class Yeti : Enemy
 
 
     public void Move()
-    {
+    {  
         rb.velocity = new Vector2(moveDir * moveSpeed, rb.velocity.y);
+        ModifyDirection();
     }
 
-    
     public override void TakeDamage(int Dmg)
     {
-        hp -= Dmg;
-        if(curState != YetiState.YDeath)
-        {
-            ChangeState(YetiState.YStunned);
-        }
-
-        if(hp <= 0)
-        {
-            ChangeState(YetiState.YDeath);
-        }
-    }
-
-    public void TakeDamage(int Dmg, Vector3 velocity)
-    {
-        hp -= Dmg;
         if (curState != YetiState.YDeath)
         {
-            ChangeState(YetiState.YStunned);
+            hp -= Dmg;
+
+            if (Dmg <= 1)
+            {
+                PushBack();
+            }
+
+            else
+            {
+                ChangeState(YetiState.YStunned);
+                animator.Play("YStunned", -1, 0);
+            }
+            
         }
 
         if (hp <= 0)
         {
             ChangeState(YetiState.YDeath);
         }
+    }
+
+    void PushBack()
+    {
+        float dir = UnityEngine.Random.Range(0,2) * 2 - 1;
+        int pushBackPower = UnityEngine.Random.Range(4, 7);
+        if (dir < 0)
+        {
+            rb.AddForce(new Vector2(-pushBackPower, 5f), ForceMode2D.Impulse);
+        }
+        else if (dir > 0)
+        {
+            rb.AddForce(new Vector2(pushBackPower, 5f), ForceMode2D.Impulse);
+        }
+
+        else { print("error"); rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse); }
     }
 
     public override void Attack(Player player)
@@ -129,7 +144,7 @@ public class Yeti : Enemy
         player.ChangeState(PlayerState.Stunned);
     }
 
-    public void ChangeDirection(Player player)
+    public void ChangeDirectionToPlayer(Player player)
     {
         float diffX = transform.position.x - player.transform.position.x;
 
@@ -147,10 +162,13 @@ public class Yeti : Enemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (curState != YetiState.YDeath && collision.collider.TryGetComponent<Player>(out Player player))
+        if (curState != YetiState.YDeath && curState != YetiState.YStunned)
         {
-            targetPlayer = player;
-            ChangeState(YetiState.YSmash);            
+            if (collision.collider.TryGetComponent<Player>(out Player player))
+            {
+                targetPlayer = player;
+                ChangeState(YetiState.YSmash);
+            }
         }
     }
 
@@ -160,5 +178,10 @@ public class Yeti : Enemy
         {
             moveDir = -moveDir;
         }
+    }
+
+    public void SetHoldItem(Player player)
+    {
+        
     }
 }

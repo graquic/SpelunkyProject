@@ -14,6 +14,7 @@ public enum PoolType
     CaveMan,
     ShotParticle,
     HitParticle,
+    WhipHitParticle,
 
 
 }
@@ -90,6 +91,7 @@ public class ObjectPoolManager : MonoBehaviour
         else
         {
             GameObject obj = poolDictionary[type][0];
+            obj.transform.parent = null;
             poolDictionary[type].RemoveAt(0);
             obj.SetActive(true);
 

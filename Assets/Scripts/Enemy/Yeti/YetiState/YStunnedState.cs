@@ -20,7 +20,7 @@ public class YStunnedState : StateBase<Yeti>
 
     public override void Update()
     {
-        if(owner.CheckCurrentAnimationEnd())
+        if(owner.CheckCurrentAnimationWait())
         {
             owner.ChangeState(YetiState.YIdle);
         }
