@@ -16,10 +16,10 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("감지 범위")]
     [SerializeField] protected float detectRange;
+    public float DetectRange { get { return detectRange; } }
 
     protected Rigidbody2D rb;
-    protected int dir;
-    public int Dir { get { return dir; } }
+    public Rigidbody2D Rb { get { return rb; } }
 
     protected virtual void Awake()
     {
@@ -43,8 +43,6 @@ public abstract class Enemy : MonoBehaviour
             float x = - Mathf.Abs(transform.localScale.x);
             transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
         }
-        
-        dir = (int)transform.localScale.x;
     }
 
 

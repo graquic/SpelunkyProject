@@ -148,7 +148,7 @@ public class Bomb : Item
 
     void PushFarAway(Transform target)
     {
-        Vector2 dir = (target.position - transform.position).normalized;
+        Vector2 dir = (target.position + new Vector3(0, 5f, 0) - transform.position).normalized;
 
         target.GetComponent<Rigidbody2D>().AddForce(dir * bouncePower, ForceMode2D.Impulse);
     }

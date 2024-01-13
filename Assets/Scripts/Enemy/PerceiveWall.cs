@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PerceiveWall : MonoBehaviour
 {
-    Transform parentTransform;
+    [SerializeField] Transform parentTransform;
 
     private void Awake()
     {
-        if(transform.parent != null)
+        if(parentTransform == null)
         {
             parentTransform = transform.parent;
         }
@@ -18,8 +19,7 @@ public class PerceiveWall : MonoBehaviour
     {
         if(collision.tag == "Ground" || collision.tag == "Wall")
         {
-            float currentX = parentTransform.localScale.x;
-
+            float currentX = parentTransform.localScale.x;  
             parentTransform.localScale = new Vector3(-currentX, parentTransform.localScale.y, parentTransform.localScale.z);
         }
     }

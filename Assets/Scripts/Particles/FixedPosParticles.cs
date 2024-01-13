@@ -10,9 +10,12 @@ public class FixedPosParticles : MonoBehaviour
 
     protected PoolType thisPoolType;
 
+    private Vector3 startScale;
+
     protected virtual void Awake()
     {
         hitParticle = GetComponent<ParticleSystem>();
+        startScale = transform.localScale;
 
     }
     protected virtual void OnEnable()
@@ -35,6 +38,7 @@ public class FixedPosParticles : MonoBehaviour
     {
         currentWaitTime = 0;
         hitParticle.Stop();
+        ResetDirection();
     }
 
     protected void SetDirection()
@@ -42,5 +46,10 @@ public class FixedPosParticles : MonoBehaviour
         float dir = GameManager.Instance.player.transform.localScale.x;
 
         transform.localScale = new Vector3(dir * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+    }
+
+    protected void ResetDirection()
+    {
+        transform.localScale = startScale;
     }
 }

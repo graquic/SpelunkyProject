@@ -106,9 +106,7 @@ public class Yeti : Enemy, IHoldable
             else
             {
                 ChangeState(YetiState.YStunned);
-                animator.Play("YStunned", -1, 0);
             }
-            
         }
 
         if (hp <= 0)

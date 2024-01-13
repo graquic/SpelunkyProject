@@ -1,53 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class CIdleState : StateBase<CaveMan>
+public class CMoveState : StateBase<CaveMan>
 {
-    public CIdleState(CaveMan owner) : base(owner)
+    public CMoveState(CaveMan owner) : base(owner)
     {
     }
 
-    float maxWaitToMoveTime;
-    float currentWaitToMoveTime;
-
+    float maxMoveTime;
+    float currentMoveTime;
     public override void Enter()
     {
-        owner.ChangeAnimation(CaveManState.CIdle);
+        owner.ChangeAnimation(CaveManState.CMove);
 
-        maxWaitToMoveTime = 0;
-        currentWaitToMoveTime = 0;
+        maxMoveTime = 0;
+        currentMoveTime = 0;
+
+        owner.SetRandomMoveDirection();
     }
     public override void Update()
     {
-        currentWaitToMoveTime += Time.deltaTime;
+        SetMoveTime();
+        currentMoveTime += Time.deltaTime;
+        
+        owner.Move();
 
-        SetWaitTime();
-
-        CheckMove();
         CheckTrace();
+        CheckIdle();        
     }
-
     public override void Exit()
     {
-        maxWaitToMoveTime = 0;
-        currentWaitToMoveTime = 0;
+        
     }
 
-    void SetWaitTime()
+    void SetMoveTime()
     {
-        if (maxWaitToMoveTime == 0)
+        if (maxMoveTime == 0)
         {
-            maxWaitToMoveTime = Random.Range(1, 3);
+            maxMoveTime = Random.Range(3, 7);
         }
     }
 
-    void CheckMove()
+    void CheckIdle()
     {
-        if (currentWaitToMoveTime >= maxWaitToMoveTime)
+        if (currentMoveTime >= maxMoveTime)
         {
-            owner.ChangeState(CaveManState.CMove);
+            owner.ChangeState(CaveManState.CIdle);
         }
     }
 
@@ -55,7 +54,7 @@ public class CIdleState : StateBase<CaveMan>
     {
         float dist = Vector2.Distance(owner.transform.position, owner.TargetPlayer.transform.position);
 
-        if(CheckFrontPlayer() == true && dist < owner.DetectRange)
+        if (CheckFrontPlayer() == true && dist < owner.DetectRange)
         {
             owner.ChangeState(CaveManState.CTrace);
         }
@@ -75,5 +74,4 @@ public class CIdleState : StateBase<CaveMan>
 
         return false;
     }
-
 }

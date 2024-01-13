@@ -8,9 +8,11 @@ public class CTraceState : StateBase<CaveMan>
     {
     }
 
+
     public override void Enter()
     {
-        
+        owner.ChangeAnimation(CaveManState.CTrace);
+        owner.CheckDirectionToPlayer();
     }
 
     public override void Exit()
@@ -20,6 +22,14 @@ public class CTraceState : StateBase<CaveMan>
 
     public override void Update()
     {
-        
+        owner.Trace();
     }
+
+    void CheckTouchingWall()
+    {
+
+    }
+
+    
+
 }

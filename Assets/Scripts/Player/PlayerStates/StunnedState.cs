@@ -53,7 +53,7 @@ public class StunnedState : StateBase<Player>
             break;
 
             case StunnedType.Stunned:
-                if(owner.CheckCurrentAnimationWait())
+                if(owner.CheckCurrentAnimationEnd())
                 {
                     owner.ChangeState(PlayerState.Idle);
                 }

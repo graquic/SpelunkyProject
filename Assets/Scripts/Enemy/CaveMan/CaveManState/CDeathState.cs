@@ -8,9 +8,31 @@ public class CDeathState : StateBase<CaveMan>
     {
     }
 
+    private enum CDeathType
+    {
+        CDeath, CHeld, CThrown
+    }
+
+    CDeathType curState;
+
     public override void Enter()
     {
-        
+        owner.ChangeAnimation(CaveManState.CDeath);
+        owner.SetIgnorePlayer(true);
+
+        curState = CDeathType.CDeath;
+    }
+    public override void Update()
+    {
+        switch(curState)
+        {
+            case CDeathType.CDeath:
+                break;
+            case CDeathType.CHeld:
+                break;
+            case CDeathType.CThrown:
+                break;
+        }
     }
 
     public override void Exit()
@@ -18,8 +40,11 @@ public class CDeathState : StateBase<CaveMan>
         
     }
 
-    public override void Update()
+    void CheckOwnerHeld()
     {
+        Player player = owner.TargetPlayer;
+        
         
     }
+    
 }

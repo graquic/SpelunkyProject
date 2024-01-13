@@ -37,16 +37,13 @@ public class Player : MonoBehaviour
     [SerializeField] List<PhysicsMaterial2D> pMaterials;
     public List<PhysicsMaterial2D> PMaterials { get { return pMaterials; } }
 
-    
-
-
     Rigidbody2D rb;
     public Rigidbody2D Rb { get { return rb; } }
     
 
     [HideInInspector] public PlayerCameraController camController;
     [SerializeField] TextMeshProUGUI text;  
-    [SerializeField] Interactor interactor;
+    
 
     private int dir;
     public int Dir { get { return dir; } }
@@ -62,7 +59,11 @@ public class Player : MonoBehaviour
     public bool isGrabEdge;
     public bool isFlipped;
 
-
+    [Header("무적 시간")]
+    [SerializeField] float invincibleTime;
+    bool isInvincible;
+    public bool IsInvincible { get {  return isInvincible; } }
+    
     [Header("이동(Move)")]
     [SerializeField] float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
@@ -90,7 +91,12 @@ public class Player : MonoBehaviour
     [SerializeField] float throwPower;
     public float ThrowPower { get { return throwPower; } }
 
+    [Header("밀려나는 정도")]
     [SerializeField] float pushBackPower;
+
+    [Header("밟기 데미지")]
+    [SerializeField] int stepDamage;
+    public int StepDamage { get { return stepDamage; } }
 
 
     private bool isSmashed;
@@ -217,6 +223,8 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
+        if (isInvincible == true) { return; }
+
         hp -= damage;
         animator.SetTrigger("Hit");
 
@@ -229,6 +237,8 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 AttackerPos)
     {
+        if (isInvincible == true) { return; }
+
         hp -= damage;
         animator.SetTrigger("Hit");
         PushBack(AttackerPos);
@@ -237,7 +247,15 @@ public class Player : MonoBehaviour
         {
             ChangeState(PlayerState.Stunned);
         }
-        
+
+        StartCoroutine(SetInvincible());
+    }
+
+    IEnumerator SetInvincible()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
     }
 
     void PushBack(Vector3 AttackerPos)
@@ -245,11 +263,11 @@ public class Player : MonoBehaviour
         float diffX = transform.position.x - AttackerPos.x;
         if (diffX < 0)
         {
-            rb.AddForce(new Vector2(-pushBackPower, 1f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(-pushBackPower, 8f), ForceMode2D.Impulse);
         }
         else if (diffX > 0)
         {
-            rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(pushBackPower, 8f), ForceMode2D.Impulse);
         }
 
         else { print("error"); rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse); }

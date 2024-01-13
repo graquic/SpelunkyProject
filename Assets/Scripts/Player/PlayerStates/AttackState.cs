@@ -59,7 +59,7 @@ public class AttackState : StateBase<Player>
 
     void CheckIdle()
     {
-        if (Mathf.Abs(owner.Rb.velocity.x) == 0 && Mathf.Abs(owner.Rb.velocity.y) == 0) // move -> idle 과는 y값도 확인한다는 점에서 다름
+        if (Mathf.Abs(owner.Rb.velocity.x) <= 0.1f && Mathf.Abs(owner.Rb.velocity.y) <= 0.1f) // move -> idle 과는 y값도 확인한다는 점에서 다름
         {
             owner.ChangeState(PlayerState.Idle);
         }

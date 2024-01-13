@@ -21,8 +21,6 @@ public class YIdleState : StateBase<Yeti>
 
     public override void Update()
     {
-        CheckDeath();
-
         currentWaitToMoveTime += Time.deltaTime;
 
         if (maxWaitToMoveTime == 0)
@@ -43,13 +41,4 @@ public class YIdleState : StateBase<Yeti>
         maxWaitToMoveTime = 0;
         currentWaitToMoveTime = 0;
     }
-
-    void CheckDeath()
-    {
-        if(owner.Hp <= 0)
-        {
-            owner.ChangeState(YetiState.YDeath);
-        }
-    }
-
 }
