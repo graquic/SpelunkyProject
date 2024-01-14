@@ -27,8 +27,6 @@ public class MapGenerator : MonoBehaviour
     private List<BSPNode> roomList;
     private List<Path> pathList;
 
-    private List<BSPNode> tempList;
-
     [Header("맵의 크기")]
     [SerializeField] private Vector2Int bottomLeft; 
     [SerializeField] private Vector2Int topRight;
@@ -95,7 +93,6 @@ public class MapGenerator : MonoBehaviour
         roomList = new List<BSPNode>();
         pathList = new List<Path>();
 
-        tempList = new List<BSPNode>();
     }
 
     private void Start()
@@ -123,7 +120,7 @@ public class MapGenerator : MonoBehaviour
         MakeRoom();
         ConnectNodeVertical();
         ConnectRoomsPath();
-        
+
 
         /*
         ConnectRoom();
@@ -132,7 +129,8 @@ public class MapGenerator : MonoBehaviour
         BuildWall();
         */
 
-        
+
+        CreatePlatformTiles(); // 구조물
 
         CreateTileMap();
 
@@ -246,9 +244,9 @@ public class MapGenerator : MonoBehaviour
 
                 if (roomList[i].isBottomConnected == false)
                 {
-                    int dir = Random.Range(0, 6);
+                    int dir = Random.Range(0, 3);
 
-                    if (dir < 4)
+                    if (dir < 2)
                     {
                         CheckBottomRoom(roomList[i]);
                     }
@@ -351,8 +349,34 @@ public class MapGenerator : MonoBehaviour
                 {
                     for (int x = 0; x < (2 * distanceFromPoint) + 1; x++)
                     {
+                        /*
+                        if(y == 0)
+                        {
+                            if(map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 1 
+                                || map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 0)
+                            {
+                                map[path.bottomLeft.y, path.bottomLeft.x + x] = 2;
+
+                                continue;
+                            }
+
+                        }
+                        else if(y == pathSize)
+                        {
+                            if (map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 1
+                                || map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 0)
+                            {
+                                map[path.bottomLeft.y + y, path.bottomLeft.x + x] = 2;
+
+                                continue;
+                            }
+                        }
+                        */
+
                         if (y == 0 || y == pathSize)
                         {
+                            if (map[path.bottomLeft.y + y, path.bottomLeft.x + x] != 1) { continue; }
+                            
                             map[path.bottomLeft.y + y, path.bottomLeft.x + x] = 1;
                         }
 
@@ -388,6 +412,68 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    void CreatePlatformTiles() // 노드 안의 천장 플랫폼 배치
+    {
+        foreach(BSPNode node in roomList)
+        {
+            CreateCenterBlocks(node);
+
+            int isPlay = Random.Range(0, 3);
+
+            if (isPlay < 2)
+            {
+                int bottomX = Mathf.RoundToInt((node.roomBottomLeft.x + node.roomTopRight.x) / 2);
+                int bottomY = node.roomBottomLeft.y - 2 * distanceFromPoint;
+
+                if (node.isBottomConnected == true)
+                {
+                    for (int x = bottomX - 4; x < bottomX + 3; x++)
+                    {
+                        map[bottomY - 4, x] = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    void CreateCenterBlocks(BSPNode node)
+    {
+        if(node.topRight.x - node.bottomLeft.x > 18 && node.topRight.y - node.bottomLeft.y > 18)
+        {
+            int centerY = (node.topRight.y + node.bottomLeft.y) / 2;
+            int centerX = (node.topRight.x + node.bottomLeft.x) / 2;
+
+            int selectForm = Random.Range(1, 3);
+
+            if(selectForm == 1)
+            {
+                for (int y = centerY - 5; y < centerY + 5; y++)
+                {
+                    for (int x = centerX - 5; x < centerX + 5; x++)
+                    {
+                        map[y, x] = 1;
+                    }
+                }
+            }
+
+            else if (selectForm == 2)
+            {
+                for (int y = centerY - 5; y < centerY + 5; y++)
+                {
+                    for (int x = centerX - 5; x < centerX + 5; x++)
+                    {
+                        if(y < x - 1) // 추후 수정
+                        {
+                            map[y, x] = 1;
+                        }
+                        
+                    }
+                }
+            }
+
+            
+        }
+    }
     
 
 

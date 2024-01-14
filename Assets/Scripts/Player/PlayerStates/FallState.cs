@@ -74,13 +74,13 @@ public class FallState : StateBase<Player>
         {
             if (owner.inven.CurrentHoldItem == null && Input.GetKeyDown(KeyCode.Z))
             {
-                owner.throwType = ThrowType.Bomb;
+                owner.SetThrowType(ThrowType.Bomb);
                 owner.ChangeState(PlayerState.Throw);
             }
 
             else if (owner.inven.CurrentHoldItem != null && Input.GetButtonDown("Attack"))
             {
-                owner.throwType = ThrowType.Item;
+                owner.SetThrowType(ThrowType.Item);
                 owner.ChangeState(PlayerState.Throw);
             }
         }

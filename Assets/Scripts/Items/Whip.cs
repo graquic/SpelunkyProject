@@ -13,6 +13,7 @@ public class Whip : Weapon
         {
             if (collision.TryGetComponent<Enemy>(out Enemy enemy))
             {
+                print("damaged");
                 enemy.TakeDamage(damage);
 
                 GameObject obj = ObjectPoolManager.Instance.GetObject(PoolType.WhipHitParticle);

@@ -60,7 +60,6 @@ public class Bullet : Item
             enemy.TakeDamage(damage);
         }
 
-        print(collision.gameObject.name);
         GameObject hitParticle = ObjectPoolManager.Instance.GetObject(PoolType.HitParticle);
         hitParticle.transform.position = transform.position;
 

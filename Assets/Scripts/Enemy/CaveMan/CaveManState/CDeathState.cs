@@ -17,9 +17,9 @@ public class CDeathState : StateBase<CaveMan>
 
     public override void Enter()
     {
-        owner.ChangeAnimation(CaveManState.CDeath);
         owner.SetIgnorePlayer(true);
 
+        owner.ChangeAnimation(CaveManState.CDeath);
         curState = CDeathType.CDeath;
     }
     public override void Update()
@@ -27,10 +27,18 @@ public class CDeathState : StateBase<CaveMan>
         switch(curState)
         {
             case CDeathType.CDeath:
+                owner.ChangeAnimation(CaveManState.CDeath);
+                CheckDeathPose();
                 break;
             case CDeathType.CHeld:
                 break;
             case CDeathType.CThrown:
+                if(Mathf.Abs(owner.Rb.velocity.x) < 0.1f && Mathf.Abs(owner.Rb.velocity.y) < 0.1f 
+                    && owner.BodyCol.IsTouchingLayers(LayerMask.GetMask("Ground")))
+                {
+                    curState = CDeathType.CDeath;
+                    owner.ChangeAnimation(CaveManState.CDeath);
+                }
                 break;
         }
     }
@@ -44,6 +52,44 @@ public class CDeathState : StateBase<CaveMan>
     {
         Player player = owner.TargetPlayer;
         
+        
+    }
+
+    void CheckDeathPose()
+    {
+        if(owner.BodyCol.IsTouchingLayers(LayerMask.GetMask("Ground")) == false)
+        {
+            if (owner.transform.localScale.x > 0)
+            {
+                if (owner.Rb.velocity.x > 0.1f)
+                {
+                    owner.ChangeAnimation("CBackHit");
+                }
+
+                else if (owner.Rb.velocity.x < 0.1f)
+                {
+                    owner.ChangeAnimation("CFrontHit");
+                }
+
+                curState = CDeathType.CThrown;
+            }
+
+            else if (owner.transform.localScale.x < 0)
+            {
+                if (owner.Rb.velocity.x < 0.1f)
+                {
+                    owner.ChangeAnimation("CBackHit");
+                }
+
+                else if (owner.Rb.velocity.x > 0.1f)
+                {
+                    owner.ChangeAnimation("CFrontHit");
+                }
+
+                curState = CDeathType.CThrown;
+            }
+        }
+
         
     }
     

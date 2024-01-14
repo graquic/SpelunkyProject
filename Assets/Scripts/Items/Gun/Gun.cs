@@ -35,7 +35,6 @@ public class Gun : Weapon
 
     bool canShoot = true;
 
-    float currentWaitDelay = 0;
 
     protected override void Awake()
     {
@@ -57,7 +56,6 @@ public class Gun : Weapon
     {
         base.Update();
 
-        currentWaitDelay += Time.deltaTime;
 
     }
 
@@ -71,9 +69,9 @@ public class Gun : Weapon
         if(canShoot == true)
         {
             canShoot = false;
-
             int dir = player.Dir;
-            player.Rb.AddForce(Vector3.left * dir * gunRecoil, ForceMode2D.Impulse);
+
+            player.Rb.AddForce(Vector3.left * dir * gunRecoil, ForceMode2D.Impulse); // ÃÑ±â ¹Ýµ¿
 
             GameObject shotParticle = ObjectPoolManager.Instance.GetObject(PoolType.ShotParticle);
             shotParticle.transform.position = shotPoint.transform.position + new Vector3(1.5f * player.Dir, 0, 0);
@@ -81,6 +79,7 @@ public class Gun : Weapon
 
             GameObject bullet = ObjectPoolManager.Instance.GetObject(PoolType.Bullet);
             bullet.transform.position = shotPoint.transform.position;
+
 
             yield return new WaitForSeconds(shotDelay);
 

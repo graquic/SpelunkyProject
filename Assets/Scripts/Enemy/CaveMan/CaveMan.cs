@@ -25,8 +25,8 @@ public class CaveMan : Enemy, IHoldable
 
     
     [SerializeField] TextMeshProUGUI testText;
-    [SerializeField] BoxCollider2D bodyCol;
-    public BoxCollider2D BodyCol { get { return bodyCol; } }
+    [SerializeField] CapsuleCollider2D bodyCol;
+    public CapsuleCollider2D BodyCol { get { return bodyCol; } }
     [SerializeField] GameObject headHitPoint;
     [SerializeField] BoxCollider2D frontDetectCol;
     public BoxCollider2D FrontDetectCol { get { return frontDetectCol; } }
@@ -144,7 +144,7 @@ public class CaveMan : Enemy, IHoldable
 
     public void Trace()
     {
-        rb.velocity = traceDir * TraceSpeed;
+        rb.velocity = traceDir * TraceSpeed + new Vector2(0, rb.velocity.y);
         ModifyDirection();
     }
     public void CheckDirectionToPlayer()
@@ -191,22 +191,32 @@ public class CaveMan : Enemy, IHoldable
         {
             hp -= Dmg;
 
+            if (hp <= 0)
+            {
+                ChangeState(CaveManState.CDeath);
+                return;
+            }
+
             if (Dmg <= 1)
             { 
                 PushBack();
-                ChangeState(CaveManState.CTrace, 0.5f);
+                if(curState != CaveManState.CStunned)
+                {
+                    ChangeState(CaveManState.CTrace);
+                }
                 
             }
             else 
             {
-                ChangeState(CaveManState.CStunned);
-                ChangeAnimation(CaveManState.CStunned);
+                if (curState != CaveManState.CStunned)
+                {
+                    ChangeState(CaveManState.CStunned);
+                    ChangeAnimation(CaveManState.CStunned);
+                }
+                    
             }
 
-            if (hp <= 0)
-            {
-                ChangeState(CaveManState.CDeath);
-            }
+            
         }
     }
     public void PushBack(Vector2 dir, float pushPower)
@@ -260,8 +270,11 @@ public class CaveMan : Enemy, IHoldable
                 }
             }
         }
-        
-    }
 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
+    }
 
 }

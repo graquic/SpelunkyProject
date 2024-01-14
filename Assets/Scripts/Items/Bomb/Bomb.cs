@@ -20,6 +20,8 @@ public class Bomb : Item
     Tilemap platformTileMap;
     ParticleSystem boomParticle;
 
+    bool isOverlapedBoom;
+
     protected override void Awake()
     {
         base.Awake();
@@ -109,6 +111,7 @@ public class Bomb : Item
 
                 else if (collider.TryGetComponent<Bomb>(out Bomb bomb))
                 {
+                    bomb.SetIsOverLapedBoom(true);
                     SetEarlyBoom(bomb);
                 }
 
@@ -146,8 +149,14 @@ public class Bomb : Item
         bomb.animator.Play("Start", -1, 1);
     }
 
-    void PushFarAway(Transform target)
+    public void SetIsOverLapedBoom(bool isOverlaped)
     {
+        this.isOverlapedBoom = isOverlaped;
+    }
+
+    void PushFarAway(Transform target) // 중첩 폭발시 하나의 물리 작용만 되게 설정
+    {
+        if (isOverlapedBoom == true) { return; }
         Vector2 dir = (target.position + new Vector3(0, 5f, 0) - transform.position).normalized;
 
         target.GetComponent<Rigidbody2D>().AddForce(dir * bouncePower, ForceMode2D.Impulse);

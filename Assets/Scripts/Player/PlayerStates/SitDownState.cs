@@ -81,24 +81,17 @@ public class SitDownState : StateBase<Player>
 
             if(closestItem != null) // 아이템 돌려놓기
             {
-                if(closestItem.transform.localScale != owner.transform.localScale)
-                {
-                    closestItem.transform.localScale = owner.transform.localScale;
-                }
-                
-                owner.inven.SetCurrentHoldItem(closestItem);
-            }
+                closestItem.transform.localScale = owner.transform.localScale;
 
-            if (owner.inven.CurrentHoldItem != null)
-            {
+                owner.inven.SetCurrentHoldItem(closestItem);
+            
                 curItem = owner.inven.CurrentHoldItem;
 
                 curItem.gameObject.layer = LayerMask.NameToLayer("Item");
                 curItem.transform.parent = owner.hand;
                 curItem.transform.localPosition = new Vector2(0.3f, -0.3f);
-                curItem.GetComponent<Collider2D>().isTrigger = true;
-                curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-                curItem.GetComponent<Rigidbody2D>().gravityScale = 0;
+
+                owner.SetHoldItemSetting(curItem, false);
             }
 
         }
@@ -108,10 +101,9 @@ public class SitDownState : StateBase<Player>
             curItem = owner.inven.CurrentHoldItem;
             curItem.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
             curItem.transform.parent = null;
-            curItem.GetComponent<Collider2D>().isTrigger = false;
-            curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            curItem.GetComponent<Rigidbody2D>().gravityScale = 1;
-            
+
+            owner.SetHoldItemSetting(curItem, true);
+
             owner.inven.SetCurrentHoldItem(null);
         }
     }

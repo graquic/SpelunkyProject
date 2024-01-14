@@ -32,7 +32,7 @@ public class AttackState : StateBase<Player>
     public override void Update()
     {
         // switch문 대신 if문을 사용하여 구현하기
-        if(owner.CheckCurrentAnimationEnd())
+        if(owner.CheckCurrentAnimationWait())
         {
             CheckIdle();
             CheckMove();

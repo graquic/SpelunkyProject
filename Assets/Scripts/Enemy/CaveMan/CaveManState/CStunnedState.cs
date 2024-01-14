@@ -36,7 +36,7 @@ public class CStunnedState : StateBase<CaveMan>
                     owner.ChangeAnimation("CHitFall");
                 }
 
-                else if (owner.BodyCol.IsTouchingLayers(target) == true && Mathf.Abs(owner.Rb.velocity.y) < 0.1f)
+                if (owner.BodyCol.IsTouchingLayers(target) == true && Mathf.Abs(owner.Rb.velocity.y) < 0.1f)
                 {
                     curState = CStunnedType.CStunned;
                     owner.ChangeAnimation("CStunned");

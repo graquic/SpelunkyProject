@@ -14,18 +14,11 @@ public enum PlayerState
     Idle, Move, Sprint, Jump, SitDown, SitUp, Attack, Hit, Stunned, OnTheEdge, GrabEdge, Fall, OnRope, Throw, Dead
 }
 
-
-public enum ThrowType
-{
-    Bomb,
-    Item,
-    None,
-}
-
 public class Player : MonoBehaviour
 {
     PlayerState curState;
-    [HideInInspector] public ThrowType throwType;
+    ThrowType throwType;
+    public ThrowType ThrowType { get { return throwType; } }
     [HideInInspector] public PlayerInventory inven;
 
     StateBase<Player>[] states = new StateBase<Player>[System.Enum.GetValues(typeof(PlayerState)).Length];
@@ -128,8 +121,8 @@ public class Player : MonoBehaviour
 
         curState = PlayerState.Idle;
         states[(int)curState].Enter();
-        
-        
+
+        dir = (int)transform.localScale.x;
     }
 
     void Update()
@@ -221,6 +214,23 @@ public class Player : MonoBehaviour
 
         Rb.AddForce(new Vector2(inputX * SprintSpeed * Time.deltaTime, 0), ForceMode2D.Force);
     }
+
+    public void SetHoldItemSetting(Item curItem, bool isAwayFromHand)
+    {
+        if(isAwayFromHand == false)
+        {
+            curItem.GetComponent<Collider2D>().isTrigger = true;
+            curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            curItem.GetComponent<Rigidbody2D>().gravityScale = 0;
+        }
+
+        else
+        {
+            curItem.GetComponent<Collider2D>().isTrigger = false;
+            curItem.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            curItem.GetComponent<Rigidbody2D>().gravityScale = 1;
+        }
+    }
     public void TakeDamage(int damage)
     {
         if (isInvincible == true) { return; }
@@ -271,6 +281,11 @@ public class Player : MonoBehaviour
         }
 
         else { print("error"); rb.AddForce(new Vector2(pushBackPower, 1f), ForceMode2D.Impulse); }
+    }
+
+    public void SetThrowType(ThrowType type)
+    {
+        throwType = type;
     }
 
     public void SetPhysicsMaterial()

@@ -55,7 +55,7 @@ MonoBehaviour:
   damage: 3
   detectRange: 1
   moveSpeed: 2
-  smashPower: 30
+  smashPower: 20
 --- !u!95 &4170431365546509097
 Animator:
   serializedVersion: 5

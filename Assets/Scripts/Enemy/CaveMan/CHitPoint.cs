@@ -10,16 +10,12 @@ public class CHitPoint : MonoBehaviour
     {
         if(collision.collider.tag == "Player")
         {
-            Debug.Log("Success");
-
             Player player = collision.collider.GetComponent<Player>();
 
             owner.TakeDamage(player.StepDamage);
 
             player.Rb.AddForce(new Vector2(0, 1f), ForceMode2D.Impulse);
             player.ChangeState(PlayerState.Jump);
-
-            Debug.Log(owner.Hp);
         }
     }
 }

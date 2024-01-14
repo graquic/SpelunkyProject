@@ -23,12 +23,12 @@ public class Item : MonoBehaviour , IHoldable
     protected virtual void Update()
     {
         
-        if (rb.velocity.magnitude > 10)
+        if (rb.velocity.magnitude > 8)
         {
             gameObject.layer = LayerMask.NameToLayer("Item");
         }
 
-        else if (rb.velocity.magnitude <= 10)
+        else if (rb.velocity.magnitude <= 8)
         {
             gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
         }
