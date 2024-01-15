@@ -13,12 +13,11 @@ TagManager:
   - Item
   - Particle
   - Enemy
-  - EnemyHitPoint
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Rope
   - Water
   - UI
   - Ground
