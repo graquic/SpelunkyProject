@@ -112,9 +112,14 @@ public class SitDownState : StateBase<Player>
     {
         if(Input.GetKeyDown(KeyCode.Z))
         {
+            if (owner.inven.GetItemCount(ItemType.Bomb) <= 0) { return; }
+
             GameObject bomb = ObjectPoolManager.Instance.GetObject(PoolType.Bomb);
             bomb.SetActive(true);
             bomb.transform.position = owner.transform.position;
+            
+            owner.inven.DecreaseItemFromInven(ItemType.Bomb, 1);
+            owner.inven.ChangedBombCount.Invoke();
         }
     }
 

@@ -67,12 +67,16 @@ public class ThrowState : StateBase<Player>
 
     void ThrowBomb()
     {
+        if (owner.inven.GetItemCount(ItemType.Bomb) <= 0) { return; }
+
         GameObject bomb = ObjectPoolManager.Instance.GetObject(PoolType.Bomb);
 
         bomb.transform.parent = null;
         bomb.transform.position = owner.throwPoint.transform.position;
 
         bomb.GetComponent<Rigidbody2D>().AddForce(((Vector3.right * owner.transform.localScale.x) + new Vector3(0, 0.7f, 0)) * owner.ThrowPower, ForceMode2D.Impulse);
+        owner.inven.DecreaseItemFromInven(ItemType.Bomb, 1);
+
     }
 
     void CheckIdle()

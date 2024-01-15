@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 1020856460}
   m_Layer: 8
   m_Name: Whip
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   damage: 1
-  pushPower: 0
+  pushPower: 3
 --- !u!212 &1624230259
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -426,6 +426,7 @@ Transform:
   - {fileID: 7093435065873213298}
   - {fileID: 228367291}
   - {fileID: 5592799623282975912}
+  - {fileID: 485119565464390294}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -441,30 +442,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8d68472b8596348be34b0f0dafca9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwType: 0
   inven: {fileID: 0}
   hand: {fileID: 1557160610}
   throwPoint: {fileID: 7093435065873213298}
   pMaterials:
   - {fileID: 6200000, guid: 0928021e9dc398b468512e83b4daefd3, type: 2}
   - {fileID: 6200000, guid: 8d4651adf2fbbc640b43e8b72f80b588, type: 2}
+  - {fileID: 6200000, guid: 89faebfd53c728148980db824a4260b6, type: 2}
   camController: {fileID: 0}
   text: {fileID: 0}
-  hp: 0
+  hp: 50
   isGrounded: 0
   isOnTheEdge: 0
   isGrabEdge: 0
   isFlipped: 0
-  invincibleTime: 0
+  invincibleTime: 1
   moveSpeed: 3000
   maxMoveSpeed: 3
   sprintSpeed: 3000
   maxSprintSpeed: 6
   jumpPowerX: 12
   jumpPowerY: 13
-  throwPower: 20
-  pushBackPower: 0
-  stepDamage: 0
+  throwPower: 14
+  pushBackPower: 10
+  stepDamage: 2
 --- !u!114 &499957462259387650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,7 +532,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 8d4651adf2fbbc640b43e8b72f80b588, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &6117868551221371681
 BoxCollider2D:
@@ -847,3 +848,65 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1001 &6935340998809396291
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6117868551221371687}
+    m_Modifications:
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387093370161884887, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+      propertyPath: m_Name
+      value: StunnedChicken
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+--- !u!4 &485119565464390294 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7387093370161884885, guid: 93adc41f0e037d84fac941ebffac6717, type: 3}
+  m_PrefabInstance: {fileID: 6935340998809396291}
+  m_PrefabAsset: {fileID: 0}

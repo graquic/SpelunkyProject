@@ -29,8 +29,8 @@ TagManager:
   - Particle
   - Bullet
   - Enemy
-  - 
-  - 
+  - Trace
+  - IgnoreMovable
   - 
   - 
   - 
@@ -59,4 +59,7 @@ TagManager:
     locked: 0
   - name: Item
     uniqueID: 2261931575
+    locked: 0
+  - name: UI
+    uniqueID: 1571295151
     locked: 0

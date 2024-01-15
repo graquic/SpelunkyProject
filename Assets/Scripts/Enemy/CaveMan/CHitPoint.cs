@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CHitPoint : MonoBehaviour
 {
-    [SerializeField] CaveMan owner;
+    [SerializeField] Enemy owner;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

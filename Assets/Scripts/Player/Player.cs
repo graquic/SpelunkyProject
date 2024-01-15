@@ -35,14 +35,11 @@ public class Player : MonoBehaviour
     
 
     [HideInInspector] public PlayerCameraController camController;
-    [SerializeField] TextMeshProUGUI text;  
-    
 
     private int dir;
     public int Dir { get { return dir; } }
 
-    [SerializeField] private int hp;
-    public int HP { get { return hp; } }
+    
 
     [Header("bool 변수들")]
     [SerializeField] private bool isGrounded;
@@ -133,9 +130,6 @@ public class Player : MonoBehaviour
         states[(int)curState].Update();
         
         //디버깅용 텍스트
-        text.text = curState.ToString();
-
-        
     }
 
     public void ChangeState(PlayerState state)
@@ -235,26 +229,33 @@ public class Player : MonoBehaviour
     {
         if (isInvincible == true) { return; }
 
-        hp -= damage;
+        GameManager.Instance.SetPlayerDamaged(damage);
         animator.SetTrigger("Hit");
 
         if(damage > 2)
         {
+            DropCurrentItem();
             ChangeState(PlayerState.Stunned);
         }
 
+        GameManager.Instance.hpChanged.Invoke();
+        StartCoroutine(SetInvincible());
     }
 
     public void TakeDamage(int damage, Vector3 AttackerPos)
     {
         if (isInvincible == true) { return; }
 
-        hp -= damage;
+        GameManager.Instance.SetPlayerDamaged(damage);
         animator.SetTrigger("Hit");
+
+        GameManager.Instance.hpChanged.Invoke();
+
         PushBack(AttackerPos);
 
         if(damage > 2)
         {
+            DropCurrentItem();
             ChangeState(PlayerState.Stunned);
         }
 
@@ -266,6 +267,14 @@ public class Player : MonoBehaviour
         isInvincible = true;
         yield return new WaitForSeconds(invincibleTime);
         isInvincible = false;
+    }
+
+    void DropCurrentItem()
+    {
+        if(inven.CurrentHoldItem != null)
+        {
+            inven.SetCurrentHoldItem(null);
+        }
     }
 
     void PushBack(Vector3 AttackerPos)

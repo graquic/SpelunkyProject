@@ -55,7 +55,7 @@ MonoBehaviour:
   damage: 3
   detectRange: 1
   moveSpeed: 2
-  smashPower: 20
+  smashPower: 25
 --- !u!95 &4170431365546509097
 Animator:
   serializedVersion: 5
@@ -144,11 +144,11 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 7
+  m_GravityScale: 4
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!1 &4170431366905862618
 GameObject:
@@ -289,6 +289,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9054608310653482940, guid: 2edd76bcb547d874ca4c4b68e2cd6f73, type: 3}
+      propertyPath: parentTransform
+      value: 
+      objectReference: {fileID: 4170431365546509101}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2edd76bcb547d874ca4c4b68e2cd6f73, type: 3}
 --- !u!4 &4170431365364353267 stripped

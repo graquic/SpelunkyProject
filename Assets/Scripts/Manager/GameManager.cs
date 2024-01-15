@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class GameManager : MonoBehaviour
     public Enemy AttackerInfo { get{ return attackerInfo; } }
 
     public Player player;
+
+    [SerializeField] private int playerHp;
+    public int PlayerHp { get { return playerHp; } }
+
+    public UnityEvent hpChanged; 
 
     private void Awake()
     {
@@ -26,11 +32,32 @@ public class GameManager : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
+
+        playerHp = 20;
         
     }
 
-    public void SetAttackerInfo(Enemy enemy)
+
+    public void SetPlayerDamaged(int dmg)
+    {
+        if(playerHp - dmg <= 0)
+        {
+            playerHp = 0;
+        }
+        else
+        {
+            playerHp -= dmg;
+        }
+        
+    }
+
+    public void SetAttackerInfo(Enemy enemy)    
     {
         attackerInfo = enemy;
+    }
+
+    public void OnGetChangedHp()
+    {
+
     }
 }

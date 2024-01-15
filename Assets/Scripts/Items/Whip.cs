@@ -13,21 +13,21 @@ public class Whip : Weapon
         {
             if (collision.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                print("damaged");
                 enemy.TakeDamage(damage);
 
                 GameObject obj = ObjectPoolManager.Instance.GetObject(PoolType.WhipHitParticle);
                 obj.transform.position = GetCollidePos(enemy);
             }
+
+            else if (collision.tag == "Item")
+            {
+                Vector2 dir = (collision.transform.position - transform.position).normalized;
+
+                collision.GetComponent<Rigidbody2D>().AddForce(dir * pushPower, ForceMode2D.Impulse);
+
+            }
         }
-
-        else if(collision.tag == "Item")
-        {
-            Vector2 dir = (collision.transform.position - transform.position).normalized;
-
-            collision.GetComponent<Rigidbody2D>().AddForce(dir * pushPower, ForceMode2D.Impulse);
-
-        }
+        
     }
 
     Vector2 GetCollidePos(Enemy enemy)

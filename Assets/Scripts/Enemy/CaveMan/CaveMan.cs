@@ -73,7 +73,6 @@ public class CaveMan : Enemy, IHoldable
 
     protected override void Update()
     {
-        testText.text = curState.ToString();
 
         base.Update();
 

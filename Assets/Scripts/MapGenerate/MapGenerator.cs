@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using TreeEditor;
 using Unity.VisualScripting;
@@ -262,7 +263,7 @@ public class MapGenerator : MonoBehaviour
     void CheckLeftRoom(BSPNode node)
     {
         if (node.roomBottomLeft.x - (2 * distanceFromPoint) > 0  // map이 2차원 배열이므로 설정된 조건 범위가 map의 크기를 벗어나면 index error - map의 최소치와 비교
-                && map[node.roomBottomLeft.y + 1, node.roomBottomLeft.x - (2 * distanceFromPoint) - 1] != 1)
+                && map[node.roomBottomLeft.y + distanceFromPoint, node.roomBottomLeft.x - (2 * distanceFromPoint) - 1] != 1)
         {
             Vector2Int BL = new Vector2Int(node.roomBottomLeft.x - (2 * distanceFromPoint), node.roomBottomLeft.y + 1);
             Vector2Int TR = new Vector2Int(node.roomBottomLeft.x, node.roomBottomLeft.y + pathSize);
@@ -277,7 +278,7 @@ public class MapGenerator : MonoBehaviour
     void CheckRightRoom(BSPNode node)
     {
         if (node.roomTopRight.x + (2 * distanceFromPoint) < map.GetLength(1) // map이 2차원 배열이므로 설정된 조건 범위가 map의 크기를 벗어나면 index error - map의 최대치와 비교
-                && map[node.roomBottomLeft.y +1, node.roomTopRight.x + (2 * distanceFromPoint) - 1] != 1)
+                && map[node.roomBottomLeft.y + distanceFromPoint, node.roomTopRight.x + (2 * distanceFromPoint) - 1] != 1)
         {
             Vector2Int BL = new Vector2Int(node.roomTopRight.x, node.roomBottomLeft.y);
             Vector2Int TR = new Vector2Int(node.roomTopRight.x + (2 * distanceFromPoint), node.roomBottomLeft.y + pathSize + 1);
@@ -349,7 +350,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     for (int x = 0; x < (2 * distanceFromPoint) + 1; x++)
                     {
-                        /*
+                        
                         if(y == 0)
                         {
                             if(map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 1 
@@ -363,16 +364,16 @@ public class MapGenerator : MonoBehaviour
                         }
                         else if(y == pathSize)
                         {
-                            if (map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 1
-                                || map[path.bottomLeft.y + 1, path.bottomLeft.x + x] == 0)
+                            if (map[path.bottomLeft.y - 1, path.bottomLeft.x + x] == 1
+                                || map[path.bottomLeft.y - 1, path.bottomLeft.x + x] == 0)
                             {
                                 map[path.bottomLeft.y + y, path.bottomLeft.x + x] = 2;
 
                                 continue;
                             }
                         }
-                        */
-
+                        
+                        
                         if (y == 0 || y == pathSize)
                         {
                             if (map[path.bottomLeft.y + y, path.bottomLeft.x + x] != 1) { continue; }
@@ -384,7 +385,7 @@ public class MapGenerator : MonoBehaviour
                         {
                             map[path.bottomLeft.y + y, path.bottomLeft.x + x] = 2;
                         }
-
+                        
                         
 
                     }
@@ -438,18 +439,24 @@ public class MapGenerator : MonoBehaviour
 
     void CreateCenterBlocks(BSPNode node)
     {
-        if(node.topRight.x - node.bottomLeft.x > 18 && node.topRight.y - node.bottomLeft.y > 18)
+        if(node.topRight.x - node.bottomLeft.x > 15 && node.topRight.y - node.bottomLeft.y > 15)
         {
             int centerY = (node.topRight.y + node.bottomLeft.y) / 2;
             int centerX = (node.topRight.x + node.bottomLeft.x) / 2;
 
-            int selectForm = Random.Range(1, 3);
+            int lengthX = (node.roomTopRight.x - node.roomBottomLeft.x) / 4;
+            int lengthY = (node.roomTopRight.y - node.roomBottomLeft.y) / 4;
 
+            int radius = 5;
+
+            int selectForm = Random.Range(1, 5);
+            
             if(selectForm == 1)
             {
-                for (int y = centerY - 5; y < centerY + 5; y++)
+
+                for (int y = centerY - lengthY; y < centerY + lengthY; y++)
                 {
-                    for (int x = centerX - 5; x < centerX + 5; x++)
+                    for (int x = centerX - lengthX; x < centerX + lengthX; x++)
                     {
                         map[y, x] = 1;
                     }
@@ -458,11 +465,11 @@ public class MapGenerator : MonoBehaviour
 
             else if (selectForm == 2)
             {
-                for (int y = centerY - 5; y < centerY + 5; y++)
+                for (int y = centerY - lengthY; y < centerY + lengthY; y++)
                 {
-                    for (int x = centerX - 5; x < centerX + 5; x++)
+                    for (int x = centerX - lengthX; x < centerX + lengthX; x++)
                     {
-                        if(y < x - 1) // 추후 수정
+                        if(y <= x) // 추후 수정
                         {
                             map[y, x] = 1;
                         }
@@ -471,6 +478,36 @@ public class MapGenerator : MonoBehaviour
                 }
             }
 
+            
+            else if (selectForm == 3)
+            for (int y = centerY - lengthY; y <= centerY + lengthY; y++) // 마름모
+            {
+                for (int x = centerX - lengthX; x <= centerX + lengthX; x++)
+                {
+                    int distanceX = Mathf.Abs(x - centerX);
+                    int distanceY = Mathf.Abs(y - centerY);
+
+                    if (distanceX + distanceY <= radius)
+                    {
+                        map[y, x] = 1;
+                    }
+                }
+            }
+            
+
+            else if(selectForm == 4)
+            {
+                int diameterY = 2 * (lengthY - 1);
+                int diameterX = 2 * (lengthX - 1);
+
+                for (int y = 0; y < diameterY; y++)
+                {
+                    for (int x = centerX - diameterX + 1 + y; x <= centerX + diameterX - 1 - y; x++)
+                    {
+                        map[y + centerY - 3, x] = 1;
+                    }
+                }
+            }
             
         }
     }

@@ -48,4 +48,16 @@ public class Rope : MonoBehaviour
             }
         }
     }
+
+    void CheckMaxHeight()
+    {
+        Vector2 extents = new Vector2(0.1f, checkHeight);
+
+        Collider2D[] checkCols = Physics2D.OverlapBoxAll(player.transform.position, extents, LayerMask.NameToLayer("Ground"));
+
+        if(checkCols == null)
+        {
+
+        }
+    }
 }

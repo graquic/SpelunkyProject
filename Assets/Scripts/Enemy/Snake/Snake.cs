@@ -35,6 +35,10 @@ public class Snake : Enemy
         canAttack = true;
     }
 
+    private void OnDisable()
+    {
+        canAttack = false;
+    }
     protected override void Update()
     {
         float dist = Vector2.Distance(transform.position, player.transform.position);

@@ -4,10 +4,8 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Gun,
     Bomb,
     Rope,
-    Fuel,
 }
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -30,7 +28,7 @@ public class Item : MonoBehaviour , IHoldable
 
         else if (rb.velocity.magnitude <= 8)
         {
-            gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+            gameObject.layer = LayerMask.NameToLayer("IgnoreMovable");
         }
     }
 
