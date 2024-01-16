@@ -14,7 +14,14 @@ public class DeadState : StateBase<Player>
     }
     public override void Update()
     {
-
+        if(owner.Rb.velocity.y < -0.1f)
+        {
+            owner.ChangeAnimation("DeadFall");
+        }
+        else
+        {
+            owner.ChangeAnimation(PlayerState.Dead);
+        }
     }
 
     public override void Exit()

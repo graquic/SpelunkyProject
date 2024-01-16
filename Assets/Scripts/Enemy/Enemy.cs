@@ -29,6 +29,10 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         // ModifyDirection();
+        if(rb.velocity.magnitude > 10)
+        {
+            
+        }
     }
 
     protected void ModifyDirection()

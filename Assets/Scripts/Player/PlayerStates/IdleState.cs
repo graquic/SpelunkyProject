@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class IdleState : StateBase<Player>
@@ -32,6 +33,7 @@ public class IdleState : StateBase<Player>
         CheckOnTheEdge();
         CheckAttack();
         CheckThrow();
+        CheckRope();
 
     }
 
@@ -115,6 +117,18 @@ public class IdleState : StateBase<Player>
             }
         }
         
+    }
+
+    void CheckRope()
+    {
+        if (owner.inven.GetItemCount(ItemType.Rope) > 0 && Input.GetButtonDown("Rope"))
+        {
+            GameObject rope = ObjectPoolManager.Instance.GetObject(PoolType.Rope);
+            rope.transform.parent = null;
+            rope.transform.position = owner.transform.position + new Vector3(0, 0.5f, 0);
+
+            owner.inven.DecreaseItemFromInven(ItemType.Rope, 1);
+        }
     }
 
 }

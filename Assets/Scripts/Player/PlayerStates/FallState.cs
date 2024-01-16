@@ -28,6 +28,7 @@ public class FallState : StateBase<Player>
 
         CheckAttack();
         CheckThrow();
+        CheckRope();
 
     }
 
@@ -85,5 +86,17 @@ public class FallState : StateBase<Player>
             }
         }
 
+    }
+
+    void CheckRope()
+    {
+        if (owner.inven.GetItemCount(ItemType.Rope) > 0 && Input.GetButtonDown("Rope"))
+        {
+            GameObject rope = ObjectPoolManager.Instance.GetObject(PoolType.Rope);
+            rope.transform.parent = null;
+            rope.transform.position = owner.transform.position + new Vector3(0, 0.5f, 0);
+
+            owner.inven.DecreaseItemFromInven(ItemType.Rope, 1);
+        }
     }
 }

@@ -18,7 +18,8 @@ public class Rope : MonoBehaviour
     [SerializeField] SpriteRenderer ropeMiddle;
     [SerializeField] SpriteRenderer ropeBottom;
 
-    [SerializeField] Sprite[] replacedImg;
+    [SerializeField] Sprite[] topRopeReplacedImg;
+    [SerializeField] Sprite[] bottomRopeReplacedImg;
     [Header("첫 로프 설치 보간")]
     [SerializeField] float upperExpandDuration;
     [Header("중간로프 설치 보간")]
@@ -26,13 +27,17 @@ public class Rope : MonoBehaviour
 
     float initColOffsetY;
     float initColSizeY;
+    Vector2 initSize;
+    Vector2 initOffset;
 
     float currentSizeHeight;
     float currentPosHeight;
 
     float currentWaitTime = 0;
 
-    
+    Player player;
+
+
 
     Vector2 startPos;
     Vector2 placedPos;
@@ -43,13 +48,18 @@ public class Rope : MonoBehaviour
     {
         initColOffsetY = ropeCol.offset.y;
         initColSizeY = ropeCol.size.y;
+        initSize = ropeCol.size;
+        initOffset = ropeCol.offset;
+
     }
 
     private void OnEnable()
     {
+        player = GameManager.Instance.player;
         targetBottomHeight = targetTopHeight;
+        ropeCol.size = new Vector2(0.5f, ropeCol.size.y);
 
-        startPos = transform.position;
+
         CheckRoof();
     }
 
@@ -69,17 +79,25 @@ public class Rope : MonoBehaviour
 
     private void OnDisable()
     {
-        ropeTop.sprite = replacedImg[0];
+        ropeTop.sprite = topRopeReplacedImg[0];
+        ropeBottom.sprite = bottomRopeReplacedImg[0];
+
         targetBottomHeight = 0;
         ropeMiddle.size = new Vector2(ropeMiddle.size.x, 0);
+
+        ropeCol.size = initSize;
+        ropeCol.offset = initOffset;
         isPlaced = false;
         ropeTop.transform.localPosition = ropeMiddle.transform.localPosition = ropeBottom.transform.localPosition = Vector3.zero;
+
+
 
         ReinitializeVariables();
     }
 
     void CheckRoof()
     {
+        startPos = player.transform.position;
         RaycastHit2D hit = Physics2D.Raycast(startPos, Vector2.up, targetTopHeight, targetLayer);
 
         if (hit.collider == null)
@@ -102,6 +120,8 @@ public class Rope : MonoBehaviour
     }
     void RopeUp()
     {
+        if (transform.position == Vector3.zero) { return; }
+
         currentWaitTime += Time.deltaTime;
 
         if (currentWaitTime <= upperExpandDuration)
@@ -109,15 +129,17 @@ public class Rope : MonoBehaviour
             float lerpU = currentWaitTime / upperExpandDuration;
 
             float newTopPosHeight = Mathf.Lerp(startPos.y, placedPos.y, lerpU);
+            
 
             transform.position = new Vector2(transform.position.x, newTopPosHeight);
+            
         }
 
         else
         {
             transform.position = new Vector2(transform.position.x, placedPos.y);
 
-            ropeTop.sprite = replacedImg[1];
+            ropeTop.sprite = topRopeReplacedImg[1];
             isPlaced = true;
 
             ReinitializeVariables();
@@ -194,6 +216,8 @@ public class Rope : MonoBehaviour
 
             ropeCol.size = new Vector2(ropeCol.size.x, initColSizeY + targetBottomHeight);
             ropeCol.offset = new Vector2(ropeCol.offset.x, initColOffsetY - targetBottomHeight / 2 + 0.3f);
+
+            ropeBottom.sprite = bottomRopeReplacedImg[1];
         }
     }
 

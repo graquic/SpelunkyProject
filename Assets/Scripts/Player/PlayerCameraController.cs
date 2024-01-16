@@ -36,7 +36,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         isLookDown = false;
         composer.m_YDamping = 2;
-        composer.m_TrackedObjectOffset.y = 3;
+        composer.m_TrackedObjectOffset.y = 1;
         
     }
 

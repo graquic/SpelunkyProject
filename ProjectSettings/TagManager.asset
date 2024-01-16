@@ -50,6 +50,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Rope
+    uniqueID: 639035507
+    locked: 0
   - name: Player
     uniqueID: 541453683
     locked: 0

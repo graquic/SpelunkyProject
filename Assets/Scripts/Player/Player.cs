@@ -16,6 +16,8 @@ public enum PlayerState
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI stateText;
+
     PlayerState curState;
     ThrowType throwType;
     public ThrowType ThrowType { get { return throwType; } }
@@ -48,6 +50,7 @@ public class Player : MonoBehaviour
     public bool IsOnTheEdge { get { return isOnTheEdge; } }
     public bool isGrabEdge;
     public bool isFlipped;
+    public bool isOnRope;
 
     [Header("무적 시간")]
     [SerializeField] float invincibleTime;
@@ -92,6 +95,8 @@ public class Player : MonoBehaviour
     private bool isSmashed;
     public bool IsSmashed { get { return isSmashed; } }
 
+    public GameObject touchedRope;
+
 
     private void Awake()
     {
@@ -124,6 +129,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        stateText.text = curState.ToString();
+
         CheckDirection();
         SetPhysicsMaterial();
 
@@ -227,14 +234,22 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
+        if (curState == PlayerState.Dead) { return; }
+
         if (isInvincible == true) { return; }
 
         GameManager.Instance.SetPlayerDamaged(damage);
+
+        if(GameManager.Instance.PlayerHp <= 0)
+        {
+            ChangeState(PlayerState.Dead);
+            return;
+        }
+
         animator.SetTrigger("Hit");
 
         if(damage > 2)
         {
-            DropCurrentItem();
             ChangeState(PlayerState.Stunned);
         }
 
@@ -244,13 +259,22 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 AttackerPos)
     {
+        if (curState == PlayerState.Dead) { return; }
+
         if (isInvincible == true) { return; }
 
         GameManager.Instance.SetPlayerDamaged(damage);
+
+        if (GameManager.Instance.PlayerHp <= 0)
+        {
+            ChangeState(PlayerState.Dead);
+            return;
+        }
+
         animator.SetTrigger("Hit");
 
         GameManager.Instance.hpChanged.Invoke();
-
+        StartCoroutine(SetInvincible());
         PushBack(AttackerPos);
 
         if(damage > 2)
@@ -331,6 +355,19 @@ public class Player : MonoBehaviour
         {
             isGrounded = true;
         }
+        
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(isOnRope == false)
+        {
+            if (collision.tag == "Rope" && Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0f)
+            {
+                touchedRope = collision.gameObject;
+                ChangeState(PlayerState.OnRope);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -339,20 +376,46 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
+        
+        if(collision.tag == "Rope")
+        {
+            if(isGrounded == false)
+            {
+                ChangeState(PlayerState.Fall);
+            }
+            else
+            {
+                ChangeState(PlayerState.Idle);
+            }
+            
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
+    { 
+        if (curState == PlayerState.Dead) { return; }
+
         if(isSmashed == true)
         {
             if (collision.collider.tag == "Ground" || collision.collider.tag == "Wall")
             {
                 isSmashed = false;
+                isInvincible = false;
                 TakeDamage(GameManager.Instance.AttackerInfo.Damage);
                 GameManager.Instance.SetAttackerInfo(null);
             }
         }
-        
+
+        if(collision.collider.tag == "Enemy")
+        {
+            if(collision.collider.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+            {
+                if (rb.velocity.y > 10f)
+                {
+                    TakeDamage(3);
+                }
+            }
+        }
     }
 }
 

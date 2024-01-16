@@ -8,6 +8,7 @@ public enum PoolType
 {
     Bullet,    
     Bomb,
+    Rope,
     Snake,
     Bat,
     Yeti,

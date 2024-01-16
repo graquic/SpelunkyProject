@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net;
 using System.Runtime.InteropServices;
 using TreeEditor;
 using Unity.VisualScripting;
@@ -73,9 +74,6 @@ public class MapGenerator : MonoBehaviour
 
     
 
-    [Header("입구,출구")]
-    public GameObject startPoint;
-    public GameObject endPoint;
 
     // public GameManager manager;
 
@@ -133,6 +131,12 @@ public class MapGenerator : MonoBehaviour
 
         CreatePlatformTiles(); // 구조물
 
+        /*
+        foreach(BSPNode node in roomList)
+        {
+            print($"{node.roomBottomLeft} , {node.roomTopRight}");
+        }
+        */
         CreateTileMap();
 
     }
@@ -415,9 +419,30 @@ public class MapGenerator : MonoBehaviour
 
     void CreatePlatformTiles() // 노드 안의 천장 플랫폼 배치
     {
+        BSPNode closestStartNode = null;
+        float candidStartPosY = 0;
+
+        List<BSPNode> endPointNodes = new();
+
         foreach(BSPNode node in roomList)
         {
             CreateCenterBlocks(node);
+
+            if(node.topRight.y == topRight.y) // CreateStartPoints
+            {
+                if(node.roomBottomLeft.y > candidStartPosY)
+                {
+                    candidStartPosY = node.roomBottomLeft.y;
+                    closestStartNode = node;
+                }
+            }
+
+            if(node.bottomLeft.y == bottomLeft.y) // CreateEndPoints
+            {
+                endPointNodes.Add(node);
+            }
+
+
 
             int isPlay = Random.Range(0, 3);
 
@@ -435,6 +460,18 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+
+        // 시작지점 - 끝지점 생성 부분
+
+        if(closestStartNode != null)
+        {
+            SetStartPoint(closestStartNode);
+        }
+
+        SetEndPoint(endPointNodes);
+
+        
+        
     }
 
     void CreateCenterBlocks(BSPNode node)
@@ -451,7 +488,7 @@ public class MapGenerator : MonoBehaviour
 
             int selectForm = Random.Range(1, 5);
             
-            if(selectForm == 1)
+            if(selectForm == 1) // 사각형
             {
 
                 for (int y = centerY - lengthY; y < centerY + lengthY; y++)
@@ -463,19 +500,38 @@ public class MapGenerator : MonoBehaviour
                 }
             }
 
-            else if (selectForm == 2)
+            else if (selectForm == 2) // 사다리꼴?
             {
-                for (int y = centerY - lengthY; y < centerY + lengthY; y++)
+                if (lengthY < 10 || lengthX < 10) { return; }
+                if(lengthY > lengthX)
                 {
-                    for (int x = centerX - lengthX; x < centerX + lengthX; x++)
+                    for (int y = centerY - lengthY; y < centerY + lengthY; y++)
                     {
-                        if(y <= x) // 추후 수정
+                        for (int x = centerX - lengthX; x < centerX + lengthX; x++)
                         {
-                            map[y, x] = 1;
+                            if (y > x)
+                            {
+                                map[y, x] = 1;
+                            }
+
                         }
-                        
                     }
                 }
+                else
+                {
+                    for (int y = centerY - lengthY; y < centerY + lengthY; y++)
+                    {
+                        for (int x = centerX - lengthX; x < centerX + lengthX; x++)
+                        {
+                            if (y <= x)
+                            {
+                                map[y, x] = 1;
+                            }
+
+                        }
+                    }
+                }
+                
             }
 
             
@@ -512,8 +568,31 @@ public class MapGenerator : MonoBehaviour
         }
     }
     
+    void SetStartPoint(BSPNode closestStartNode)
+    {
+        float startPosX = (closestStartNode.bottomLeft.x + closestStartNode.topRight.x) / 2;
+        float startPosY = (closestStartNode.bottomLeft.y + closestStartNode.topRight.y) / 2;
 
+        Vector2 startPoint = new Vector2(startPosX, startPosY);
+        print(startPoint);
 
+        GameManager.Instance.SetStartPoint(startPoint);
+    }
+
+    void SetEndPoint(List<BSPNode> endPointNodes)
+    {
+        if (endPointNodes.Count != 0) // endPoint 생성
+        {
+            int targetIndex = Random.Range(0, endPointNodes.Count);
+            float endPosX = (endPointNodes[targetIndex].bottomLeft.x + endPointNodes[targetIndex].topRight.x) / 2;
+            float endPosY = endPointNodes[targetIndex].roomBottomLeft.y;
+
+            Vector2 endPoint = new Vector2(endPosX, endPosY);
+
+            GameManager.Instance.SetEndPoint(endPoint);
+        }
+    }
+    
     void CreateTileMap()
     {
         int mapWidth = map.GetLength(1);

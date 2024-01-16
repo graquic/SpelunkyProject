@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: Platfomr Rule Tile
+  m_Name: Stage1 Platfomr Rule Tile
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: 301606069, guid: 755d78f8bd29ef742a93fa809be5efc8, type: 3}
   m_DefaultGameObject: {fileID: 0}

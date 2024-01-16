@@ -30,6 +30,7 @@ public class JumpState : StateBase<Player>
         CheckGrabEdge();
         CheckAttack();
         CheckThrow();
+        CheckRope();
     }
 
 
@@ -94,6 +95,20 @@ public class JumpState : StateBase<Player>
             }
         }
 
+    }
+
+    void CheckRope()
+    {
+        if (owner.inven.GetItemCount(ItemType.Rope) > 0 && Input.GetButtonDown("Rope"))
+        {
+            GameObject rope = ObjectPoolManager.Instance.GetObject(PoolType.Rope);
+            rope.transform.parent = null;
+            rope.transform.position = owner.transform.position + new Vector3(0, 0.5f, 0);
+
+            rope.gameObject.SetActive(true);
+
+            owner.inven.DecreaseItemFromInven(ItemType.Rope, 1);
+        }
     }
 
 }
