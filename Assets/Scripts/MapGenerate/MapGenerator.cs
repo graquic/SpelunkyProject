@@ -128,6 +128,7 @@ public class MapGenerator : MonoBehaviour
         BuildWall();
         */
 
+        CreateGates();
 
         CreatePlatformTiles(); // 구조물
 
@@ -416,33 +417,71 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
-
-    void CreatePlatformTiles() // 노드 안의 천장 플랫폼 배치
+    void CreateGates()
     {
         BSPNode closestStartNode = null;
         float candidStartPosY = 0;
 
         List<BSPNode> endPointNodes = new();
 
-        foreach(BSPNode node in roomList)
+        foreach (BSPNode node in roomList)
         {
-            CreateCenterBlocks(node);
-
-            if(node.topRight.y == topRight.y) // CreateStartPoints
+            if (node.topRight.y == topRight.y) // CreateStartPoints
             {
-                if(node.roomBottomLeft.y > candidStartPosY)
+                if (node.roomBottomLeft.y > candidStartPosY)
                 {
                     candidStartPosY = node.roomBottomLeft.y;
                     closestStartNode = node;
                 }
             }
 
-            if(node.bottomLeft.y == bottomLeft.y) // CreateEndPoints
+            if (node.bottomLeft.y == bottomLeft.y) // CreateEndPoints
             {
                 endPointNodes.Add(node);
             }
+        }
+
+        if (closestStartNode != null)
+        {
+            SetStartPoint(closestStartNode);
+        }
+
+        SetEndPoint(endPointNodes);
+    }
+
+    void SetStartPoint(BSPNode closestStartNode)
+    {
+        float startPosX = (closestStartNode.bottomLeft.x + closestStartNode.topRight.x) / 2 + extendedWidth;
+        float startPosY = (closestStartNode.bottomLeft.y + closestStartNode.topRight.y) / 2 + extendedHeight;
+
+        Vector2 startPoint = new Vector2(startPosX, startPosY);
+
+        GameManager.Instance.SetStartPoint(startPoint);
+    }
+
+    void SetEndPoint(List<BSPNode> endPointNodes)
+    {
+        if (endPointNodes.Count != 0) // endPoint 생성
+        {
+            int targetIndex = Random.Range(0, endPointNodes.Count);
+            float endPosX = (endPointNodes[targetIndex].bottomLeft.x + endPointNodes[targetIndex].topRight.x) / 2 + extendedWidth;
+            float endPosY = endPointNodes[targetIndex].roomBottomLeft.y + 3 + extendedHeight;
+            endPointNodes[targetIndex].isEndPoint = true;
+
+            Vector2 endPoint = new Vector2(endPosX, endPosY);
+            print(endPoint);
+            print($"{endPointNodes[targetIndex].roomBottomLeft} , {endPointNodes[targetIndex].roomTopRight}");
+
+            GameManager.Instance.SetEndPoint(endPoint);
+        }
+    }
 
 
+    void CreatePlatformTiles() // 노드 안의 천장 플랫폼 배치
+    {
+        foreach(BSPNode node in roomList)
+        {
+            CreateCenterBlocks(node);
 
             int isPlay = Random.Range(0, 3);
 
@@ -460,22 +499,12 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-
-        // 시작지점 - 끝지점 생성 부분
-
-        if(closestStartNode != null)
-        {
-            SetStartPoint(closestStartNode);
-        }
-
-        SetEndPoint(endPointNodes);
-
-        
-        
     }
 
     void CreateCenterBlocks(BSPNode node)
     {
+        if (node.isEndPoint == true) { return; }
+
         if(node.topRight.x - node.bottomLeft.x > 15 && node.topRight.y - node.bottomLeft.y > 15)
         {
             int centerY = (node.topRight.y + node.bottomLeft.y) / 2;
@@ -568,30 +597,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
     
-    void SetStartPoint(BSPNode closestStartNode)
-    {
-        float startPosX = (closestStartNode.bottomLeft.x + closestStartNode.topRight.x) / 2;
-        float startPosY = (closestStartNode.bottomLeft.y + closestStartNode.topRight.y) / 2;
-
-        Vector2 startPoint = new Vector2(startPosX, startPosY);
-        print(startPoint);
-
-        GameManager.Instance.SetStartPoint(startPoint);
-    }
-
-    void SetEndPoint(List<BSPNode> endPointNodes)
-    {
-        if (endPointNodes.Count != 0) // endPoint 생성
-        {
-            int targetIndex = Random.Range(0, endPointNodes.Count);
-            float endPosX = (endPointNodes[targetIndex].bottomLeft.x + endPointNodes[targetIndex].topRight.x) / 2;
-            float endPosY = endPointNodes[targetIndex].roomBottomLeft.y;
-
-            Vector2 endPoint = new Vector2(endPosX, endPosY);
-
-            GameManager.Instance.SetEndPoint(endPoint);
-        }
-    }
+    
     
     void CreateTileMap()
     {

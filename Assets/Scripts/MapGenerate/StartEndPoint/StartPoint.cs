@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class StartPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private IEnumerator Start()
     {
-        
-    }
+        yield return null;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        transform.position = GameManager.Instance.startPoint;
     }
 }

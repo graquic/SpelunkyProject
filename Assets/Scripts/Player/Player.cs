@@ -239,8 +239,9 @@ public class Player : MonoBehaviour
         if (isInvincible == true) { return; }
 
         GameManager.Instance.SetPlayerDamaged(damage);
+        GameManager.Instance.hpChanged.Invoke();
 
-        if(GameManager.Instance.PlayerHp <= 0)
+        if (GameManager.Instance.PlayerHp <= 0)
         {
             ChangeState(PlayerState.Dead);
             return;
@@ -253,7 +254,7 @@ public class Player : MonoBehaviour
             ChangeState(PlayerState.Stunned);
         }
 
-        GameManager.Instance.hpChanged.Invoke();
+        
         StartCoroutine(SetInvincible());
     }
 
@@ -264,6 +265,7 @@ public class Player : MonoBehaviour
         if (isInvincible == true) { return; }
 
         GameManager.Instance.SetPlayerDamaged(damage);
+        GameManager.Instance.hpChanged.Invoke();
 
         if (GameManager.Instance.PlayerHp <= 0)
         {
@@ -273,13 +275,12 @@ public class Player : MonoBehaviour
 
         animator.SetTrigger("Hit");
 
-        GameManager.Instance.hpChanged.Invoke();
+        
         StartCoroutine(SetInvincible());
         PushBack(AttackerPos);
 
         if(damage > 2)
         {
-            DropCurrentItem();
             ChangeState(PlayerState.Stunned);
         }
 

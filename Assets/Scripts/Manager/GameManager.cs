@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
-        playerHp = 20;
+        playerHp = 2;
         
     }
 

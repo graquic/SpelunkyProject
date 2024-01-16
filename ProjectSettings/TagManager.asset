@@ -13,6 +13,7 @@ TagManager:
   - Item
   - Particle
   - Enemy
+  - Gate
   layers:
   - Default
   - TransparentFX
@@ -30,7 +31,7 @@ TagManager:
   - Enemy
   - Trace
   - IgnoreMovable
-  - 
+  - Gate
   - 
   - 
   - 
