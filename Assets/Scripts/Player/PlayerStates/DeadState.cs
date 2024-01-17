@@ -20,6 +20,7 @@ public class DeadState : StateBase<Player>
         }
         else
         {
+            UIManager.Instance.EnableGameOverUI();
             owner.ChangeAnimation(PlayerState.Dead);
         }
     }

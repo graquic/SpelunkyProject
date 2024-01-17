@@ -21,6 +21,8 @@ public class CDeathState : StateBase<CaveMan>
 
         owner.ChangeAnimation(CaveManState.CDeath);
         curState = CDeathType.CDeath;
+
+        GameManager.Instance.AddCurScore(owner.Score);
     }
     public override void Update()
     {

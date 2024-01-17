@@ -27,11 +27,14 @@ public class MapGenerator : MonoBehaviour
     [Header("노드 보관 목록")]
     private List<BSPNode> treeList;
     private List<BSPNode> roomList;
+    public List<BSPNode> RoomList { get { return roomList; } }
     private List<Path> pathList;
 
     [Header("맵의 크기")]
     [SerializeField] private Vector2Int bottomLeft; 
+    public Vector2Int BottomLeft { get { return bottomLeft; } }
     [SerializeField] private Vector2Int topRight;
+    public Vector2Int TopRight { get {  return topRight; } }
 
     [Header("맵의 바깥 벽 두께")]
     [SerializeField] private int extendedWidth;
@@ -60,6 +63,7 @@ public class MapGenerator : MonoBehaviour
 
     private int[,] map;
     private int[,] extendedMap;
+    public int[,] ExtendedMap { get { return extendedMap; } }
 
     [Header("통로 크기")]
     [SerializeField] int pathSize;
@@ -451,11 +455,13 @@ public class MapGenerator : MonoBehaviour
 
     void SetStartPoint(BSPNode closestStartNode)
     {
-        float startPosX = (closestStartNode.bottomLeft.x + closestStartNode.topRight.x) / 2 + extendedWidth;
-        float startPosY = (closestStartNode.bottomLeft.y + closestStartNode.topRight.y) / 2 + extendedHeight;
+        float startPosX = (closestStartNode.bottomLeft.x + closestStartNode.topRight.x) / 2 + extendedWidth + 3;
+        //float startPosY = (closestStartNode.bottomLeft.y + closestStartNode.topRight.y) / 2 + extendedHeight - 3;
+        float startPosY = closestStartNode.roomBottomLeft.y + extendedHeight + 1 + distanceFromPoint;
 
         Vector2 startPoint = new Vector2(startPosX, startPosY);
 
+        closestStartNode.isStartPoint = true;
         GameManager.Instance.SetStartPoint(startPoint);
     }
 
@@ -465,12 +471,14 @@ public class MapGenerator : MonoBehaviour
         {
             int targetIndex = Random.Range(0, endPointNodes.Count);
             float endPosX = (endPointNodes[targetIndex].bottomLeft.x + endPointNodes[targetIndex].topRight.x) / 2 + extendedWidth;
-            float endPosY = endPointNodes[targetIndex].roomBottomLeft.y + 3 + extendedHeight;
+            float endPosY = endPointNodes[targetIndex].roomBottomLeft.y + extendedHeight + 1 + distanceFromPoint;
             endPointNodes[targetIndex].isEndPoint = true;
 
             Vector2 endPoint = new Vector2(endPosX, endPosY);
+            /*
             print(endPoint);
             print($"{endPointNodes[targetIndex].roomBottomLeft} , {endPointNodes[targetIndex].roomTopRight}");
+            */
 
             GameManager.Instance.SetEndPoint(endPoint);
         }

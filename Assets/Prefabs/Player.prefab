@@ -124,9 +124,9 @@ GameObject:
   - component: {fileID: 1624230259}
   - component: {fileID: 1624230258}
   - component: {fileID: 1020856460}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Whip
-  m_TagString: Player
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   damage: 1
-  pushPower: 3
+  pushPower: 5
 --- !u!212 &1624230259
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -199,8 +199,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 541453683
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -258,7 +258,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!1 &2306574982715516778
 GameObject:
@@ -417,7 +417,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6117868552751317203}
   - {fileID: 1557160610}
@@ -450,13 +450,12 @@ MonoBehaviour:
   - {fileID: 6200000, guid: 8d4651adf2fbbc640b43e8b72f80b588, type: 2}
   - {fileID: 6200000, guid: 89faebfd53c728148980db824a4260b6, type: 2}
   camController: {fileID: 0}
-  text: {fileID: 0}
-  hp: 50
   isGrounded: 0
   isOnTheEdge: 0
   isGrabEdge: 0
   isFlipped: 0
-  invincibleTime: 1
+  isOnRope: 0
+  invincibleTime: 0.5
   moveSpeed: 3000
   maxMoveSpeed: 3
   sprintSpeed: 3000
@@ -466,6 +465,7 @@ MonoBehaviour:
   throwPower: 14
   pushBackPower: 10
   stepDamage: 2
+  touchedRope: {fileID: 0}
 --- !u!114 &499957462259387650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,6 +478,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a213cc2764f8c144abb6ca01ab21b2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChangedBombCount:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameStatusUI, Assembly-CSharp
+        m_MethodName: OnChangeBombCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ChangedRopeCount:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameStatusUI, Assembly-CSharp
+        m_MethodName: OnChangeRopeCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4721914674858330838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,7 +643,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6117868551221371687}
   m_RootOrder: 0
@@ -657,7 +687,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 541453683
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 187644527, guid: 5c2b9f6ea58030e40a2bf82ca005c4f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

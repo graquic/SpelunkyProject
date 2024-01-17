@@ -16,6 +16,11 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("감지 범위")]
     [SerializeField] protected float detectRange;
+
+    [Header("점수")] 
+    [SerializeField] protected int score;
+    public int Score { get { return score; } }
+
     public float DetectRange { get { return detectRange; } }
 
     protected Rigidbody2D rb;
@@ -33,6 +38,11 @@ public abstract class Enemy : MonoBehaviour
         {
             
         }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.AddCurScore(score);
     }
 
     protected void ModifyDirection()

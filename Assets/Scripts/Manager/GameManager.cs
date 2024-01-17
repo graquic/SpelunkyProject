@@ -22,6 +22,16 @@ public class GameManager : MonoBehaviour
     public Vector2 EndPoint { get { return endPoint; } }
 
 
+
+    private int worldStageLevel;
+    public int WorldStageLevel { get { return worldStageLevel; } }
+
+    private int subStageLevel;
+    public int SubStageLevel { get { return subStageLevel; } }
+
+    private int curScore;
+    public int CurScore { get { return curScore; } }
+
     public UnityEvent hpChanged;
 
 
@@ -34,24 +44,33 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        
 
-        if(player == null)
+
+        SetPlayer();
+
+        worldStageLevel = 1;
+        subStageLevel = 1;
+        
+    }
+
+    private IEnumerator Start()
+    {
+        yield return null;
+
+        player.transform.position = startPoint;
+    }
+
+    public void SetPlayer()
+    {
+        if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
         }
-
-        playerHp = 2;
-        
-    }
-
-    private void Update()
-    {
-        
     }
 
 
-    public void SetPlayerDamaged(int dmg)
+        public void SetPlayerDamaged(int dmg)
     {
         if(playerHp - dmg <= 0)
         {
@@ -62,6 +81,11 @@ public class GameManager : MonoBehaviour
             playerHp -= dmg;
         }
         
+    }
+
+    public void AddCurScore(int score)
+    {
+        curScore += score;
     }
 
     public void SetAttackerInfo(Enemy enemy)    

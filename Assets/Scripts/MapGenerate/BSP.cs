@@ -31,6 +31,7 @@ public class BSPNode
     public bool isSideConnected;
     public bool isBottomConnected;
 
+    public bool isStartPoint;
     public bool isEndPoint;
 
     public int depth;

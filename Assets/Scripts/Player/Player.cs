@@ -191,7 +191,7 @@ public class Player : MonoBehaviour
 
     public void InputMoveAddForce()
     {
-        if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
+        // if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
 
         inputX = Input.GetAxis("Horizontal");
 
@@ -205,7 +205,7 @@ public class Player : MonoBehaviour
 
     public void InputSprintAddForce()
     {
-        if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
+        // if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
 
         inputX = Input.GetAxis("Horizontal");
 

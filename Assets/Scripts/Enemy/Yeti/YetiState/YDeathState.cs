@@ -13,6 +13,8 @@ public class YDeathState : StateBase<Yeti>
         owner.ChangeAnimation(YetiState.YDeath);
 
         owner.gameObject.layer = LayerMask.NameToLayer("IgnorePlayer");
+
+        GameManager.Instance.AddCurScore(owner.Score);
     }
 
     public override void Exit()

@@ -28,6 +28,7 @@ public class GameStatusUI : MonoBehaviour
     private void Update()
     {
         PrintCurrentTime();
+        currentStageText.text = $"{GameManager.Instance.WorldStageLevel} - {GameManager.Instance.SubStageLevel}";
     }
 
     public void OnChangeLifeCount()

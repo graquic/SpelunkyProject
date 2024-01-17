@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1840842168216799906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1840842168216799904}
+  - component: {fileID: 1840842168216799907}
+  m_Layer: 0
+  m_Name: ObjectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1840842168216799904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840842168216799906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1840842168216799907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840842168216799906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc0a0464da7968439874ac5cb0242ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPools:
+  - poolType: 1
+    poolPrefab: {fileID: 6190441688312694293, guid: b1c04ad6bbde67840ab6218763d86221, type: 3}
+    initCount: 5
+  - poolType: 0
+    poolPrefab: {fileID: 3537551044863328310, guid: 4dd306310b292e249a8a921e26a7f665, type: 3}
+    initCount: 20
+  - poolType: 7
+    poolPrefab: {fileID: 8009810557976228652, guid: b08538618b93ce84089a23aa4cc59022, type: 3}
+    initCount: 5
+  - poolType: 8
+    poolPrefab: {fileID: 2499277236963918256, guid: d1d2b62f769f51147b81ea9a18bc97ad, type: 3}
+    initCount: 5
+  - poolType: 3
+    poolPrefab: {fileID: 8052750257762997655, guid: 5345a1168a7f2a04d8902679245ed0ec, type: 3}
+    initCount: 5
+  - poolType: 9
+    poolPrefab: {fileID: 1298969440733457703, guid: 496bb80e1fcee2c44bb0cf4867ed3422, type: 3}
+    initCount: 5
+  - poolType: 2
+    poolPrefab: {fileID: 5564029832981454430, guid: e5ed492195db9d84683205b9c43f8f8f, type: 3}
+    initCount: 10

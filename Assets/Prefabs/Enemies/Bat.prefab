@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef87ebef3394af4ca3439023573a56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 10
+  hp: 1
   damage: 1
   detectRange: 5
+  score: 10
   moveSpeed: 2
   attackDelay: 2
 --- !u!61 &3951429391266343973
@@ -192,7 +193,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1144728843
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1971100104, guid: 6fed5645c452b184abcb313b674ec946, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

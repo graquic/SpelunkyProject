@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PausedPanelUI : MonoBehaviour
 {
-    [SerializeField] GameObject gameStatusPanel;
+    GameStatusUI gameStatusPanel;
 
     [SerializeField] Sprite isOnImage;
     [SerializeField] Sprite isOffImage;
@@ -26,13 +26,15 @@ public class PausedPanelUI : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
+    private void Start()
+    {
+        gameStatusPanel = UIManager.Instance.GameStatusPanel;
+    }
     private void OnEnable()
     {
-        isOnPaused = true;
-
         StartCoroutine(SetAnimationWithPause("Start"));
-        //GameManager.Instance.player.gameObject.SetActive(false);
-        gameStatusPanel.SetActive(false);
+        GameManager.Instance.player.enabled = false;
+        gameStatusPanel.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -105,16 +107,18 @@ public class PausedPanelUI : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetButtonDown("Attack"))
         {
+            GameManager.Instance.player.enabled = true;
+            gameStatusPanel.gameObject.SetActive(true);
+
             if (idx == 0)
             {
-                //GameManager.Instance.player.gameObject.SetActive(true);
-                gameStatusPanel.SetActive(true);
                 StartCoroutine(SetAnimationWithPause("End"));
             }
 
             else if (idx == 1)
             {
-                // TODO : 메인메뉴로 넘어가는 씬 설정
+                Time.timeScale = 1;
+                SceneController.Instance.LoadMainMenuScene();
             }
 
             else if (idx == 2)
@@ -126,9 +130,6 @@ public class PausedPanelUI : MonoBehaviour
 
         else if(Input.GetKeyDown(KeyCode.Escape))
         {
-            //GameManager.Instance.player.gameObject.SetActive(true);
-            isOnPaused = true;
-            gameStatusPanel.SetActive(true);
             StartCoroutine(SetAnimationWithPause("End"));
         }
         

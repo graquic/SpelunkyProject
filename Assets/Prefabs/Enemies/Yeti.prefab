@@ -54,6 +54,7 @@ MonoBehaviour:
   hp: 10
   damage: 3
   detectRange: 1
+  score: 30
   moveSpeed: 2
   smashPower: 25
 --- !u!95 &4170431365546509097
@@ -221,7 +222,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1144728843
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -742501569, guid: 461b89348dcfde546b3579699bd42bf4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
