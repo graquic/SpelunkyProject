@@ -16,8 +16,6 @@ public enum PlayerState
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI stateText;
-
     PlayerState curState;
     ThrowType throwType;
     public ThrowType ThrowType { get { return throwType; } }
@@ -129,8 +127,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        stateText.text = curState.ToString();
-
         CheckDirection();
         SetPhysicsMaterial();
 
@@ -195,6 +191,8 @@ public class Player : MonoBehaviour
 
     public void InputMoveAddForce()
     {
+        if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
+
         inputX = Input.GetAxis("Horizontal");
 
         if (Rb.velocity.x > maxMoveSpeed && inputX > 0) return;
@@ -207,6 +205,8 @@ public class Player : MonoBehaviour
 
     public void InputSprintAddForce()
     {
+        if (UIManager.Instance.PausedPanel.IsOnPaused == true) { return; }
+
         inputX = Input.GetAxis("Horizontal");
 
         if (Rb.velocity.x > maxSprintSpeed && inputX > 0) return;

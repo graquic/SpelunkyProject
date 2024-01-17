@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int playerHp;
     public int PlayerHp { get { return playerHp; } }
 
-
     public Vector2 startPoint;
     public Vector2 StartPoint { get { return startPoint; } }
 
@@ -23,7 +22,8 @@ public class GameManager : MonoBehaviour
     public Vector2 EndPoint { get { return endPoint; } }
 
 
-    public UnityEvent hpChanged; 
+    public UnityEvent hpChanged;
+
 
     private void Awake()
     {
@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
         }
 
         playerHp = 2;
+        
+    }
+
+    private void Update()
+    {
         
     }
 

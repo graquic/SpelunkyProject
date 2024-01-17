@@ -6,9 +6,15 @@ public class BackgroundReposition : MonoBehaviour
 {
     Player player;
 
-    private void Start()
+    private IEnumerator Start()
     {
         player = GameManager.Instance.player;
+
+        yield return null;
+
+        yield return null;
+
+        transform.position += player.transform.position;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -23,22 +29,16 @@ public class BackgroundReposition : MonoBehaviour
 
         float dirX = playerPos.x > thisPos.x ? 1 : -1;
         float dirY = playerPos.y > thisPos.y ? 1 : -1;
-
-        switch(transform.tag)
+        
+        if (diffX > diffY)
         {
-            case "Background":
-                if(diffX > diffY)
-                {
-                    transform.Translate(Vector3.right * dirX * 40);
-                }
-
-                else if(diffX < diffY)
-                {
-                    transform.Translate(Vector3.up * dirY * 40);
-                }
-                break;
-            case "Enemy":
-                break;
+            transform.Translate(Vector3.right * dirX * 40);
         }
+
+        else if (diffX < diffY)
+        {
+            transform.Translate(Vector3.up * dirY * 40);
+        }
+        
     }
 }
