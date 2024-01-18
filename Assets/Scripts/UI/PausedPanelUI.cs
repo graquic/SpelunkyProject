@@ -118,7 +118,8 @@ public class PausedPanelUI : MonoBehaviour
             else if (idx == 1)
             {
                 Time.timeScale = 1;
-                SceneController.Instance.LoadMainMenuScene();
+                EnemySpawnManager.Instance.ResetEnemyList();
+                SceneController.Instance.LoadScene("MainMenuScene");
             }
 
             else if (idx == 2)

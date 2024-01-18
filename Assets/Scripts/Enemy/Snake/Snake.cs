@@ -102,6 +102,7 @@ public class Snake : Enemy
 
         if( hp <= 0)
         {
+            GameManager.Instance.AddCurScore(score);
             ObjectPoolManager.Instance.ReturnObject(PoolType.Snake, gameObject);
         }
     }

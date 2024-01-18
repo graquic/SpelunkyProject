@@ -89,7 +89,8 @@ public class MapGenerator : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        
+        //DontDestroyOnLoad(gameObject);
 
         map = new int[topRight.y - bottomLeft.y, topRight.x - bottomLeft.x];
 

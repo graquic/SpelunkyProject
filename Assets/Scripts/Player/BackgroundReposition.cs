@@ -32,12 +32,12 @@ public class BackgroundReposition : MonoBehaviour
         
         if (diffX > diffY)
         {
-            transform.Translate(Vector3.right * dirX * 40);
+            transform.Translate(Vector3.right * dirX * 60);
         }
 
         else if (diffX < diffY)
         {
-            transform.Translate(Vector3.up * dirY * 40);
+            transform.Translate(Vector3.up * dirY * 60);
         }
         
     }

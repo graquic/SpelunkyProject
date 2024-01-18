@@ -13,17 +13,28 @@ public class EnemySpawnManager : MonoBehaviour
         Yeti = PoolType.Yeti,
         CaveMan = PoolType.CaveMan,
     }
+    public static EnemySpawnManager Instance { get; private set; }
 
     Dictionary<SpawnType, Transform> enemyParents = new();
+
+    List<GameObject> enemyList = new();
+    Transform enemiesParent;
+
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+        // DontDestroyOnLoad(gameObject);
+    }
 
     private IEnumerator Start()
     {
         yield return null;
 
-        for (int i = 0; i < Enum.GetValues(typeof(SpawnType)).Length; i++)
-        {
-
-        }
+        enemiesParent = new GameObject("enemiesParent").transform;
 
         foreach (BSPNode node in MapGenerator.Instance.RoomList)
         {
@@ -36,7 +47,7 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (node.topRight.y != MapGenerator.Instance.TopRight.y)
         {
-            int generateCount = UnityEngine.Random.Range(0, 3);
+            int generateCount = UnityEngine.Random.Range(1, 4);
 
             for (int count = 0; count < generateCount; count++)
             {
@@ -62,6 +73,9 @@ public class EnemySpawnManager : MonoBehaviour
 
                 GameObject bat = ObjectPoolManager.Instance.GetObject((PoolType)SpawnType.Bat);
                 bat.transform.position = new Vector2(posX, posY);
+                bat.transform.parent = enemiesParent;
+
+                enemyList.Add(bat);
             }
         }
     }
@@ -72,7 +86,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         List<Vector2> posList = new List<Vector2>();
 
-        int genNum = UnityEngine.Random.Range(0, 4);
+        int genNum = UnityEngine.Random.Range(1, 4);
 
         if(genNum <= 0) { return; }
 
@@ -118,8 +132,37 @@ public class EnemySpawnManager : MonoBehaviour
 
             GameObject enemy = ObjectPoolManager.Instance.GetObject(genType);
             enemy.transform.position = pos;
+            enemy.transform.parent = enemiesParent;
+
+            enemyList.Add(enemy);
         }
     }
 
     
+    public void ResetEnemyList()
+    {
+        foreach(var enemy in enemyList)
+        {
+            if(enemy.TryGetComponent<Yeti>(out Yeti yeti))
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolType.Yeti, enemy);
+            }
+
+            else if(enemy.TryGetComponent<CaveMan>(out CaveMan caveMan))
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolType.CaveMan, enemy);
+            }
+
+            else if(enemy.TryGetComponent<Snake>(out Snake snake))
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolType.Snake, enemy);
+            }
+            else if(enemy.TryGetComponent<Bat>(out Bat bat))
+            {
+                ObjectPoolManager.Instance.ReturnObject(PoolType.Bat, enemy);
+            }
+        }
+
+        enemyList.Clear();
+    }
 }

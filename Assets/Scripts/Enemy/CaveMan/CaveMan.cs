@@ -192,6 +192,7 @@ public class CaveMan : Enemy, IHoldable
 
             if (hp <= 0)
             {
+                GameManager.Instance.AddCurScore(score);
                 ChangeState(CaveManState.CDeath);
                 return;
             }
@@ -260,11 +261,13 @@ public class CaveMan : Enemy, IHoldable
         {
             if (collision.collider.tag == "Player")
             {
-                collision.collider.GetComponent<Player>().TakeDamage(damage, transform.position);
+                Player player = collision.collider.GetComponent<Player>();
+                player.TakeDamage(damage, transform.position);
 
                 if (curState == CaveManState.CTrace)
                 {
                     PushBack(-PushedDir, pushPower);
+                    if (player.CurState == PlayerState.Dead) { return; }
                     ChangeState(CaveManState.CStunned);
                 }
             }

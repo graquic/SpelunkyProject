@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private int subStageLevel;
     public int SubStageLevel { get { return subStageLevel; } }
 
-    private int curScore;
+    [SerializeField] private int curScore;
     public int CurScore { get { return curScore; } }
 
     public UnityEvent hpChanged;
@@ -43,10 +43,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-
-        SetPlayer();
+        // DontDestroyOnLoad(gameObject);
 
         worldStageLevel = 1;
         subStageLevel = 1;
@@ -55,7 +52,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Start()
     {
+        curScore = 0;
+
         yield return null;
+
+        SetPlayer();
 
         player.transform.position = startPoint;
     }

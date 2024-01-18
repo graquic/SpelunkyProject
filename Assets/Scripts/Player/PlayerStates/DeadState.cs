@@ -11,6 +11,7 @@ public class DeadState : StateBase<Player>
     public override void Enter()
     {
         owner.ChangeAnimation(PlayerState.Dead);
+        UIManager.Instance.EnableGameOverUI();
     }
     public override void Update()
     {
@@ -20,7 +21,6 @@ public class DeadState : StateBase<Player>
         }
         else
         {
-            UIManager.Instance.EnableGameOverUI();
             owner.ChangeAnimation(PlayerState.Dead);
         }
     }

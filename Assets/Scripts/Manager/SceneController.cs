@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,12 +15,23 @@ public class SceneController : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         // SceneManager.sceneLoaded는 기본적으로 Scene scene과 LoadSceneMode mode 라는 매개변수를 가지는 함수를 받음
+    }
+
+    public void LoadCurrentScene()
+    {
+        int idx = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(idx);
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 
     public void LoadStageScene()
@@ -47,13 +59,14 @@ public class SceneController : MonoBehaviour
     {
         if(scene.name == "MainMenuScene")
         {
-            UIManager.Instance.ControlRefUI(scene.name);
+            //UIManager.Instance.ControlRefUI(scene.name);
         }
 
         else if(scene.name == "StageScene")
         {
+            GameManager.Instance.SetPlayer();
             UIManager.Instance.InitializeUIRef();
-            UIManager.Instance.ControlRefUI(scene.name);
+            // UIManager.Instance.ControlRefUI(scene.name);
             GameManager.Instance.SetPlayer();
         }
     }

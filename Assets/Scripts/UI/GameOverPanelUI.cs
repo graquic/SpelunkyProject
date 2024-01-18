@@ -42,6 +42,7 @@ public class GameOverPanelUI : MonoBehaviour
     private void Update()
     {
         CheckInput();
+        CheckEnterToggles(curIdx);
     }
 
     void CheckInput()
@@ -77,6 +78,33 @@ public class GameOverPanelUI : MonoBehaviour
         {
             selectToggles[idx].GetComponentInChildren<Image>().sprite = isOffImage;
             selectToggles[idx].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        }
+
+    }
+
+    void CheckEnterToggles(int idx)
+    {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetButtonDown("Attack"))
+        {
+           
+            if (idx == 0)
+            {
+                EnemySpawnManager.Instance.ResetEnemyList();
+                SceneController.Instance.LoadCurrentScene();
+            }
+
+            else if (idx == 1)
+            {
+                Time.timeScale = 1;
+                EnemySpawnManager.Instance.ResetEnemyList();
+                SceneController.Instance.LoadScene("MainMenuScene");
+            }
+
+            else if (idx == 2)
+            {
+                // 시간 남으면 정말로 게임을 종료할건지 추가 질문 UI 만들기
+                Application.Quit();
+            }
         }
 
     }

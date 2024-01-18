@@ -42,7 +42,7 @@ public abstract class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.Instance.AddCurScore(score);
+        
     }
 
     protected void ModifyDirection()

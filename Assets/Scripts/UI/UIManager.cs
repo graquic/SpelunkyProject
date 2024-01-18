@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -23,13 +24,19 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
         InitializeUIRef();
     }
 
     private void Update()
     {
+        if(pausedPanel == null)
+        {
+            pausedPanel = FindObjectOfType<PausedPanelUI>();
+        }
+
+
         if (pausedPanel.gameObject.activeSelf == false && Input.GetKeyDown(KeyCode.Escape))
         {
             pausedPanel.gameObject.SetActive(true);
@@ -38,20 +45,25 @@ public class UIManager : MonoBehaviour
 
     public void InitializeUIRef()
     {
-        if (gameStatusPanel == null)
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if(currentSceneName == "StageScene")
         {
-            gameStatusPanel = FindObjectOfType<GameStatusUI>();
-        }
+            if (gameStatusPanel == null)
+            {
+                gameStatusPanel = FindObjectOfType<GameStatusUI>();
+            }
 
-        if (gameOverPanel == null)
-        {
-            gameOverPanel = FindObjectOfType<GameOverPanelUI>();
-        }
+            if (gameOverPanel == null)
+            {
+                gameOverPanel = FindObjectOfType<GameOverPanelUI>();
+            }
 
-        if (pausedPanel == null)
-        {
-            pausedPanel = FindObjectOfType<PausedPanelUI>();
+            if (pausedPanel == null)
+            {
+                pausedPanel = FindObjectOfType<PausedPanelUI>();
+            }
         }
+        
     }
 
     public void ControlRefUI(string SceneName)

@@ -46,7 +46,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
         
     }

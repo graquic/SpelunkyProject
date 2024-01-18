@@ -17,6 +17,7 @@ public enum PlayerState
 public class Player : MonoBehaviour
 {
     PlayerState curState;
+    public PlayerState CurState { get { return curState; } }
     ThrowType throwType;
     public ThrowType ThrowType { get { return throwType; } }
     [HideInInspector] public PlayerInventory inven;

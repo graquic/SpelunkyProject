@@ -111,6 +111,7 @@ public class Yeti : Enemy, IHoldable
 
         if (hp <= 0)
         {
+            GameManager.Instance.AddCurScore(score);
             ChangeState(YetiState.YDeath);
         }
     }

@@ -67,7 +67,6 @@ public class Bat : Enemy
 
     public override void Attack(Player player)
     {
-        print(1);
         canAttack = false;
         player.TakeDamage(damage, transform.position);
         StartCoroutine(CheckAttackDelay());
@@ -86,6 +85,7 @@ public class Bat : Enemy
 
         if (hp <= 0)
         {
+            GameManager.Instance.AddCurScore(score);
             ObjectPoolManager.Instance.ReturnObject(PoolType.Bat, gameObject);
         }
     }
