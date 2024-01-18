@@ -78,8 +78,8 @@ public class EnemySpawnManager : MonoBehaviour
 
         for(int count = 0; count < genNum; count++)
         {
-            float posX = UnityEngine.Random.Range(node.roomBottomLeft.x + 1 + MapGenerator.Instance.ExtendedWidth,
-                node.roomTopRight.x - 1 + MapGenerator.Instance.ExtendedWidth);
+            float posX = UnityEngine.Random.Range(node.roomBottomLeft.x + 2 + MapGenerator.Instance.ExtendedWidth,
+                node.roomTopRight.x - 2 + MapGenerator.Instance.ExtendedWidth);
 
             float posY = node.roomTopRight.y - 1 + MapGenerator.Instance.ExtendedHeight;
 

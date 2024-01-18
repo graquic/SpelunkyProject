@@ -57,6 +57,7 @@ public class MapGenerator : MonoBehaviour
 
     [Header("노드 벽 간의 거리")]
     [SerializeField] private int distanceFromPoint;
+    public int DistanceFromPoint { get { return distanceFromPoint; } }
 
     
     private int depth = 0;

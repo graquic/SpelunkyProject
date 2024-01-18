@@ -17,9 +17,14 @@ public class PlayerCameraController : MonoBehaviour
         composer = vCam.GetCinemachineComponent<CinemachineFramingTransposer>();
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
-        
+        composer.m_XDamping = composer.m_YDamping = composer.m_ZDamping = 0;
+
+        float waitSec = 0.5f;
+        yield return new WaitForSeconds(waitSec);
+
+        composer.m_XDamping = composer.m_YDamping = composer.m_ZDamping = 1;
     }
 
     public void LookDown()
