@@ -18,6 +18,7 @@ public class GameOverPanelUI : MonoBehaviour
     [SerializeField] Sprite isOnImage;
     [SerializeField] Sprite isOffImage;
 
+    float curTime;
     int minute;
     int second;
 
